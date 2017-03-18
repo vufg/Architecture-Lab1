@@ -1,0 +1,15 @@
+140.114.75.143
+account:  s103062703
+password: s103062703
+
+
+Q:
+LO 
+HI
+PC
+$sp
+
+git version control log
+
+attack instructions notes:
+error message: illegal instruction found at 0xaddress
