@@ -4,26 +4,36 @@
 
 using namespace std;
 
-int main()
-{
-    int cmd, opcode;
-    int imemory[127] = {0};
-    int dmemory[127] = {0};
-    int reg[31] = {0};
+int cmd, opcode;
+int imemory[127] = {0};
+int dmemory[127] = {0};
+int reg[31] = {0};
 
-    int dmemory_write(int address, int value){
+
+int dmemory_acess(int address, int value, int write_enable){
+    if(write_enable){
         dmemory[address/4] = value;
-        return 0;
-    }
-
-    int dmemory_read(int address){
+    }else{
         return dmemory[address / 4];
     }
+    return 0;
+}
 
-    {/// instruction functions
+int register_acess(int address, int value, int write_enable){
+    if(write_enable){
+        imemory[address/4] = value;
+    }else{
+        return imemory[address / 4];
+    }
+    return 0;
+}
+
+
+
+/// instruction functions
 
         ///overflow problem needs to-be-done
-    	int add(int rs, int rt, int rd){
+    int add(int rs, int rt, int rd){
         reg[rd] = reg[rs] + reg[rt];
 		return 0;
 	}
@@ -40,27 +50,27 @@ int main()
 		return 0;
 	}
 
-	int and(int rs, int rt, int rd){
+	int and_f(int rs, int rt, int rd){
 	    reg[rd] = reg[rs] & reg[rt];
 		return 0;
 	}
 
-	int or(int rs, int rt, int rd){
+	int or_f(int rs, int rt, int rd){
 	    reg[rd] = reg[rs] | reg[rt];
 		return 0;
 	}
 
-	int xor(int rs, int rt, int rd){
+	int xor_f(int rs, int rt, int rd){
 	    reg[rd] = reg[rs] ^ reg[rt];
 		return 0;
 	}
 
-	int nor(int rs, int rt, int rd){
+	int nor_f(int rs, int rt, int rd){
 	    reg[rd] = ~(reg[rs] | reg[rt]);
 		return 0;
 	}
 
-	int nand(int rs, int rt, int rd){
+	int nand_f(int rs, int rt, int rd){
 	    reg[rd] = ~(reg[rs] & reg[rt]);
 		return 0;
 	}
@@ -116,7 +126,7 @@ int main()
 		return 0;
 	}
 
-	int halt(v){
+	int haltf(void){
 		return 0;
 	}
 
@@ -164,7 +174,7 @@ int main()
 		return 0;
 	}
 
-	int addi(int rs, int rt, int immediate){
+	int andi(int rs, int rt, int immediate){
 		return 0;
 	}
 
@@ -194,10 +204,15 @@ int main()
 
 
 
-    }
 
 
 
+
+
+
+
+int main()
+{
 
     ///cin >> hex >> cmd;
     cmd = 0x3008001A;
@@ -212,7 +227,7 @@ int main()
         shamt = cmd << 21 >> 27;
         funct = cmd << 26 >> 26;
 
-        switch (funct):
+        switch (funct){
         case 0x20:
             add(rs, rt, rd);
             break;
@@ -226,24 +241,24 @@ int main()
             break;
 
         case 0x24:
-            and(rs, rt, rd);
+            and_f(rs, rt, rd);
             break;
 
         case 0x25:
-            or(rs, rt, rd);
+            or_f(rs, rt, rd);
             break;
         ///
 
         case 0x26:
-            xor(rs, rt, rd);
+            xor_f(rs, rt, rd);
             break;
 
         case 0x27:
-            nor(rs, rt, rd);
+            nor_f(rs, rt, rd);
             break;
 
         case 0x28:
-            nand(rs, rt, rd);
+            nand_f(rs, rt, rd);
             break;
 
         case 0x2A:
@@ -253,7 +268,7 @@ int main()
 
 
         case 0x00:
-            sll(ss, rt, rd);
+            sll(rs, rt, rd);
             break;
 
         case 0x02:
@@ -285,10 +300,8 @@ int main()
             mflo(rs, rt, rd);
             break;
 
-        default:
-            break;
-
-
+        //default:
+        }
     }
     /// J-Type instruction
     else if(  opcode == 0x02 || opcode == 0x03){
@@ -301,7 +314,7 @@ int main()
             jal(address);
         }
     }else if(opcode == 0x3f){
-        halt();
+        haltf();
     }
     ///I-Type instruction
     else{
@@ -312,7 +325,7 @@ int main()
         immediate = cmd << 16 >> 16;
 
 
-        switch (opcode):
+        switch (opcode){
         case 0x08:
             addi(rs, rt, immediate);
             break;
@@ -389,8 +402,8 @@ int main()
             bgtz(rs, rt, immediate);
             break;
 
-        default:
-            break;
+        //default:
+        }
     }
 
 
