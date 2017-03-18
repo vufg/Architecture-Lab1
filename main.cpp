@@ -8,6 +8,7 @@ int cmd, opcode;
 int imemory[127] = {0};
 int dmemory[127] = {0};
 int reg[31] = {0};
+int pc, num_iimage, num_dimage, sp;
 
 
 int dmemory_acess(int address, int value, int write_enable){
@@ -211,8 +212,41 @@ int register_acess(int address, int value, int write_enable){
 
 
 
-int main()
-{
+int main(){
+
+    ///input
+    pc = 0x00000000;
+    num_iimage = 0x0000000D;
+    int iimage[13] = {0x30080000,
+                    0x30090000,
+                    0x292A0003,
+                    0x11400003,
+                    0x01094020,
+
+                    0x21290001,
+                    0x08000002,
+                    0xAC080000,
+                    0xFFFFFFFF,
+                    0xFFFFFFFF,
+
+                    0xFFFFFFFF,
+                    0xFFFFFFFF,
+                    0xFFFFFFFF};
+    for(int i = 0; i < num_iimage; i++){
+        imemory[i] = iimage[i];
+    }
+
+    sp = 0x00000400;
+    num_iimage = 0x00000003;
+    int iimage[3] ={0x12345678,
+                    0x9ABCDEF0,
+                    0x13572468};
+
+    for(int i = 0; i < num_dimage; i++){
+        imemory[i] = dimage[i];
+
+
+
 
     ///cin >> hex >> cmd;
     cmd = 0x3008001A;

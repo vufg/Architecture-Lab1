@@ -12,4 +12,6 @@ $sp
 git version control log
 
 attack instructions notes:
+Address overflow or misaligned access in I or D memory is not allowed
+
 error message: illegal instruction found at 0xaddress
