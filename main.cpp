@@ -9,10 +9,28 @@ int imemory[127] = {0};
 int dmemory[127] = {0};
 int reg[31] = {0};
 int pc = 0, hi = 0, lo = 0;
+int mul_flag = false;
 int num_iimage, num_dimage;
+bool quit_flag = false;
+int cycle = 0;
+
+int dmemory_acess(int address, int value, int len, int write_enable){
+    if(address < 0 || address > 1023){
+        //fprintf(file_ptr , "In cycle %d: Address Overflow\n", cycle);
+        printf("In cycle %d: Address Overflow\n", cycle);
+        quit_flag = true;
+        return 0;
+    }
+
+    if(len == 4) {
+
+    }else if(len == 2){
+
+    }else if(len == 1){
+
+    }
 
 
-int dmemory_acess(int address, int value, int write_enable){
     if(write_enable){
         dmemory[address/4] = value;
     }else{
@@ -22,12 +40,18 @@ int dmemory_acess(int address, int value, int write_enable){
 }
 
 int register_acess(int address, int value, int write_enable){
-    if(write_enable){
-        imemory[address/4] = value;
-    }else{
-        return imemory[address / 4];
+
+    if(address == 0 and write_enable){
+        //fprintf( file_ptr , "In cycle %d: Write $0 Error\n", cycle);
+        printf("In cycle %d: Write $0 Error\n", cycle);
+        return 0;
     }
-    return 0;
+    if(write_enable){
+        reg[address] = value;
+        return 0;
+    }else{
+        return reg[addres];
+    }
 }
 
 
@@ -38,101 +62,138 @@ int register_acess(int address, int value, int write_enable){
         s = s >> 31;
         a = s >> 31;
         b = b >> 31;
-        if( !(a ^ b) && (s^a) )
+        if( !(a ^ b) && (s^a) ){
+            //fprintf(file_ptr , "In cycle %d: Number Overflow\n", cycle);
+            printf("In cycle %d: Number Overflow\n", cycle);
             return true;
-        else
-            return false;
+        }
+        return false;
     }
 
 
 
-    int add(int rs, int rt, int rd){
+    int add(int rd, int rs, int rt){
         int ans = reg[rs] + reg[rt];
-        if (overflow_f(reg[rs], reg[rt],reg[rd]){
-
-        }else{
-            register_acess(rd, ans, 1);
-        }
+        register_acess(rd, ans, 1);
+        overflow_f(ans, reg[rs], reg[rt]);
 		return 0;
 	}
 
-	int addu(int rs, int rt, int rd){
+	int addu(int rd, int rs, int rt){{
         unsigned int ans;
         ans = (unsigned)reg[rs] + (unsigned)reg[rt];
-        reg[rd] = (int)ans;
+        register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int sub(int rs, int rt, int rd){
-	    reg[rd] = reg[rs] - reg[rt];
+	int sub(int rd, int rs, int rt){
+        int ans = reg[rs] - reg[rt];
+        register_acess(rd, ans, 1);
+        overflow_f(ans, reg[rs], reg[rt]);
 		return 0;
 	}
 
-	int and_f(int rs, int rt, int rd){
-	    reg[rd] = reg[rs] & reg[rt];
+	int and_f(int rd, int rs, int rt){
+	    int ans;
+	    ans = reg[rs] & reg[rt];
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int or_f(int rs, int rt, int rd){
-	    reg[rd] = reg[rs] | reg[rt];
+	int or_f(int rd, int rs, int rt){
+	    int ans;
+	    ans = reg[rs] | reg[rt];
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int xor_f(int rs, int rt, int rd){
-	    reg[rd] = reg[rs] ^ reg[rt];
+	int xor_f(int rd, int rs, int rt){
+	    int ans;
+	    ans = reg[rs] ^ reg[rt];
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int nor_f(int rs, int rt, int rd){
-	    reg[rd] = ~(reg[rs] | reg[rt]);
+	int nor_f(int rd, int rs, int rt){
+	    int ans;
+	    ans = ~(reg[rs] | reg[rt]);
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int nand_f(int rs, int rt, int rd){
-	    reg[rd] = ~(reg[rs] & reg[rt]);
+	int nand_f(int rd, int rs, int rt){
+	    int ans;
+	    ans = ~(reg[rs] & reg[rt]);
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int slt(int rs, int rt, int rd){
-	    if(reg[rs] < reg[rt])
-            reg[rd] = 1;
-        else
-            reg[rd] = 0;
+	int slt(int rd, int rs, int rt){
+	    int ans;
+	    ans = (reg[rs] < reg[rt]);
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int sll(int rs, int rt, int rd){
-	    reg[rd] = reg[rd] << reg[rt];
+
+	///shift operations
+	int sll(int rd, int rt, int shamt){
+	    int ans;
+	    ans = reg[rt] << shamt;
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int srl(int rs, int rt, int rd){
-	    reg[rd] = (unsigned int)reg[rd] >> reg[rt];
+	int srl(int rd, int rt, int shamt){
+	    int ans;
+	    ans = (unsigned int)reg[rt] >> shamt;
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int sra(int rs, int rt, int rd){
-	    reg[rd] = reg[rd] >> reg[rt];
+	int sra(int rd, int rt, int shamt){
+	    int ans;
+	    ans = reg[rt] >> shamt;
+	    register_acess(rd, ans, 1);
 		return 0;
 	}
 
-	int jr(int rs, int rt, int rd){
+	int jr(int rs){
+	    pc = reg[rs];
 		return 0;
 	}
 
-	int mult(int rs, int rt, int rd){
-		return 0;
+	int mult(int rs, int rt){
+	    if(mul_flag){
+             fprintf(file_ptr , "In cycle %d: Overwrite HI-LO registers\n", cycle);
+             printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
+	    }
+	    mul_flag = true;
+	    hi = (int)( ((long long)reg[rs] * (long long)reg[rt]) >> 32);
+        lo = (int)( ((long long)reg[rs] * (long long)reg[rt]) << 32 >> 32);
+        return 0;
 	}
 
 	int multu(int rs, int rt, int rd){
+	    if(mul_flag){
+             fprintf(file_ptr , "In cycle %d: Overwrite HI-LO registers\n", cycle);
+             printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
+	    }
+	    mul_flag = true;
+	    hi = (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) >> 32);
+        lo = (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) << 32 >> 32);
+        return 0;
+	}
+
+	int mfhi(int rd){
+	    mul_flag = false;
+	    register_acess(rd, hi, 1);
 		return 0;
 	}
 
-	int mfhi(int rs, int rt, int rd){
-		return 0;
-	}
-
-	int mflo(int rs, int rt, int rd){
+	int mflo(int rd){
+	    mul_flag = false;
+	    register_acess(rd, lo, 1);
 		return 0;
 	}
 
@@ -147,35 +208,82 @@ int register_acess(int address, int value, int write_enable){
 		return 0;
 	}
 
-	int halt_f(void){
+    ///immediate calculations
+	int addi(int rt, int rs, int immediate){
+	    int ans = reg[rs] + immediate;
+        register_acess(rt, ans, 1);
+        overflow_f(ans, reg[rs], immediate);
 		return 0;
 	}
 
-	int addi(int rs, int rt, int immediate){
+	int addiu(int rt, int rs, int immediate){
+		unsigned int ans = (unsigned)reg[rs]  + (unsigned int)immediate;
+        register_acess(rt, ans, 1);
 		return 0;
 	}
 
-	int addiu(int rs, int rt, int immediate){
+	int lw(int rt, int rs, int immediate){
+	    int tmp;
+	    if(rt == 0){
+            ///error detection of write register zero is prior to other error detections
+            register_acess(rt, 0, 1);
+	    }
+
+	    tmp = dmemory_acess(reg[rs] + immediate, 0, 4, 0);
+	    if(rt != 0){
+            register_acess(rt, tmp, 1);
+	    }
 		return 0;
 	}
 
-	int slw(int rs, int rt, int immediate){
+	int lh(int rt, int rs, int immediate){
+	    int tmp;
+	    if(rt == 0){
+            register_acess(rt, 0, 1);
+	    }
+
+	    tmp = dmemory_acess(reg[rs] + immediate, 0, 2, 0);
+	    if(rt != 0){
+            register_acess(rt, tmp, 1);
+	    }
 		return 0;
 	}
 
-	int lh(int rs, int rt, int immediate){
+	int lhu(int rt, int rs, int immediate){
+	    int tmp;
+	    if(rt == 0){
+            register_acess(rt, 0, 1);
+	    }
+
+	    tmp = (unsigned int)dmemory_acess(reg[rs] + immediate, 0, 2, 0);
+	    if(rt != 0){
+            register_acess(rt, tmp, 1);
+	    }
 		return 0;
 	}
 
-	int lhu(int rs, int rt, int immediate){
+	int lb(int rt, int rs, int immediate){
+	    int tmp;
+	    if(rt == 0){
+            register_acess(rt, 0, 1);
+	    }
+	    tmp = dmemory_acess(reg[rs] + immediate, 0, 1, 0);
+	    if(rt != 0){
+            register_acess(rt, tmp, 1);
+	    }
 		return 0;
 	}
 
-	int lb(int rs, int rt, int immediate){
-		return 0;
-	}
+	int lbu(int rt, int rs, int immediate){
+	    int tmp;
+	    if(rt == 0){
+            register_acess(rt, 0, 1);
+	    }
 
-	int lbu(int rs, int rt, int immediate){
+	    tmp = (unsigned int)dmemory_acess(reg[rs] + immediate, 0, 1, 0);
+	    if(rt != 0){
+            register_acess(rt, tmp, 1);
+	    }
 		return 0;
 	}
 
@@ -195,31 +303,56 @@ int register_acess(int address, int value, int write_enable){
 		return 0;
 	}
 
-	int andi(int rs, int rt, int immediate){
+	int andi(int rt, int rs, int immediate){
+	    int ans;
+	    ans = reg[rs] & immediate;
+	    register_acess(rt, ans, 1);
 		return 0;
 	}
 
-	int ori(int rs, int rt, int immediate){
+	int ori(int rt, int rs, int immediate){
+	    int ans;
+	    ans = reg[rs] | immediate;
+	    register_acess(rt, ans, 1);
 		return 0;
 	}
 
-	int nori(int rs, int rt, int immediate){
+	int nori(int rt, int rs, int immediate){
+	    int ans;
+	    ans = ~(reg[rs] | immediate);
+	    register_acess(rt, ans, 1);
 		return 0;
 	}
 
-	int slti(int rs, int rt, int immediate){
+	int slti(int rt, int rs, int immediate){
+	    int ans;
+	    ans = reg[rs] < immediate;
+	    register_acess(rt, ans, 1);
 		return 0;
 	}
 
 	int beq(int rs, int rt, int immediate){
+	    if(reg[rs] == reg[rt]){
+            pc = pc + 4 + immediate * 4;
+	    }
 		return 0;
 	}
 
 	int bne(int rs, int rt, int immediate){
+	    if(reg[rs] != reg[rt]){
+            pc = pc + 4 + immediate * 4;
+	    }
 		return 0;
 	}
 
-	int bgtz(int rs, int rt, int immediate){
+	int bgtz(int rs, int immediate){
+	    if(reg[rs] > 0){
+            pc = pc + 4 + immediate * 4;
+	    }
+		return 0;
+	}
+
+	int halt_f(void){
 		return 0;
 	}
 
@@ -460,6 +593,11 @@ int main(){
 
     cmd << 32-6 >> 32-6;
     ///cout << hex << (cmd << 32-6 >> 32-6) << endl;
+
+
+    do{
+        one_cycle_simulator(cmd);
+    }while(!quit_flag);
 
 
     ///n = -1;
