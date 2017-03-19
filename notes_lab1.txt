@@ -23,3 +23,15 @@ Note that NOP instruction
 andi: immediate is unsigned
 slti: immediate is signed
 beq bne bgrz: immediate is signed
+
+write $0 is prior to other error;
+
+int tmp = 3587;
+cout << bitset<32>(tmp) << endl;
+cout << bitset<32>( (tmp) << 20) << endl;
+cout << bitset<32>( (tmp) << 20 >> 20) << endl;
+
+!!!!!!after error like misaligned data, reg will still be changed or not? do i have to output the data inside regs? NO
+
+in sw function  if the instruction trys to write $s0, dmemory_access will still be excuted, right?
+

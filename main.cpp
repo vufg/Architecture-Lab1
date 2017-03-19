@@ -21,20 +21,55 @@ int dmemory_acess(int address, int value, int len, int write_enable){
         quit_flag = true;
         return 0;
     }
-
+    if(address % len){
+        //fprintf(file_ptr , "In cycle %d: Misalignment Error\n", cycle);
+        printf("In cycle %d: Misalignment Error\n", cycle);
+        quit_flag = true;
+        return 0;
+    }
+    int tmp = dmemory[address/4];
     if(len == 4) {
+        if(write_enable){
+            tmp = value;
+            dmemory[address/4] = tmp;
+        }else{
+            return tmp;
+        }
+
 
     }else if(len == 2){
+        if(write_enable)
+        {
+            if(address % 4 == 2){
+                tmp = tmp & 0x0000FFFF;
+                tmp = tmp | (value << 16);
+            }else{
+                tmp = tmp & 0xFFFF0000;
+                tmp = tmp | value;
+            }
+            dmemory[address/4] = tmp;
+        }else
+        {
+            if(address % 4 == 2){
+                return ((unsigned int)tmp) >> 16;
+            }else{
+                return ((unsigned int)tmp) << 16 >> 16;
+            }
+        }
 
     }else if(len == 1){
-
-    }
-
-
-    if(write_enable){
-        dmemory[address/4] = value;
-    }else{
-        return dmemory[address / 4];
+        int shift = address % 4;
+        if(write_enable){
+            int mask = 0x000000FF;
+            mask = mask << (shift * 8);
+            mask = ~mask;
+            tmp = tmp & mask;
+            value = value & 0x000000FF;
+            tmp = tmp | (value << (shift * 8));
+            dmemory[address/4] = tmp;
+        }else{
+            return ((unsigned int)tmp) << ( (3 - shift) * 8) >> 24;
+        }
     }
     return 0;
 }
@@ -224,8 +259,8 @@ int register_acess(int address, int value, int write_enable){
 
 	int lw(int rt, int rs, int immediate){
 	    int tmp;
+	    ///error detection of write register zero is prior to other error detections
 	    if(rt == 0){
-            ///error detection of write register zero is prior to other error detections
             register_acess(rt, 0, 1);
 	    }
 
@@ -237,12 +272,14 @@ int register_acess(int address, int value, int write_enable){
 	}
 
 	int lh(int rt, int rs, int immediate){
-	    int tmp;
+	    int tmp, address;
 	    if(rt == 0){
             register_acess(rt, 0, 1);
 	    }
 
-	    tmp = dmemory_acess(reg[rs] + immediate, 0, 2, 0);
+	    address = reg[rs] + immediate;
+	    tmp = dmemory_acess(address, 0, 2, 0);
+	    tmp = tmp << 16 >> 16;
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
 	    }
@@ -250,12 +287,13 @@ int register_acess(int address, int value, int write_enable){
 	}
 
 	int lhu(int rt, int rs, int immediate){
-	    int tmp;
+	    int tmp, address;
 	    if(rt == 0){
             register_acess(rt, 0, 1);
 	    }
 
-	    tmp = (unsigned int)dmemory_acess(reg[rs] + immediate, 0, 2, 0);
+	    address = reg[rs] + immediate;
+	    tmp = dmemory_acess(address, 0, 2, 0);
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
 	    }
@@ -263,11 +301,14 @@ int register_acess(int address, int value, int write_enable){
 	}
 
 	int lb(int rt, int rs, int immediate){
-	    int tmp;
+	    int tmp, address;
 	    if(rt == 0){
             register_acess(rt, 0, 1);
 	    }
-	    tmp = dmemory_acess(reg[rs] + immediate, 0, 1, 0);
+
+	    address = reg[rs] + immediate;
+	    tmp = dmemory_acess(address, 0, 1, 0);
+	    tmp = tmp << 24 >> 24;
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
 	    }
@@ -275,31 +316,69 @@ int register_acess(int address, int value, int write_enable){
 	}
 
 	int lbu(int rt, int rs, int immediate){
-	    int tmp;
+	    int tmp, address;
 	    if(rt == 0){
             register_acess(rt, 0, 1);
 	    }
 
-	    tmp = (unsigned int)dmemory_acess(reg[rs] + immediate, 0, 1, 0);
+	    address = reg[rs] + immediate;
+	    tmp = dmemory_acess(address, 0, 1, 0);
+
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
 	    }
 		return 0;
 	}
 
-	int sw(int rs, int rt, int immediate){
+	int sw(int rt, int rs, int immediate){
+	    int tmp, address;
+	    if(rt == 0){
+            register_acess(rt, 0, 1);
+	    }
+
+	    address = reg[rs] + immediate;
+	    tmp = dmemory_acess(address, 0, 4, 0);
+
+	    if(rt != 0){
+            register_acess(rt, tmp, 1);
+	    }
 		return 0;
 	}
 
-	int sh(int rs, int rt, int immediate){
+	int sh(int rt, int rs, int immediate){
+	    int tmp, address;
+	    if(rt == 0){
+            register_acess(rt, 0, 1);
+	    }
+
+	    address = reg[rs] + immediate;
+	    tmp = dmemory_acess(address, 0, 2, 0);
+	    tmp = tmp & 0x0000FFFF;
+	    if(rt != 0){
+            register_acess(rt, tmp, 1);
+	    }
 		return 0;
 	}
 
-	int sb(int rs, int rt, int immediate){
+	int sb(int rt, int rs, int immediate){
+	    int tmp, address;
+	    if(rt == 0){
+            register_acess(rt, 0, 1);
+	    }
+
+	    address = reg[rs] + immediate;
+	    tmp = dmemory_acess(address, 0, 1, 0);
+	    tmp = tmp & 0x000000FF;
+	    if(rt != 0){
+            register_acess(rt, tmp, 1);
+	    }
 		return 0;
 	}
 
-	int lui(int rs, int rt, int immediate){
+	int lui(int rt, int immediate){
+	    int tmp;
+	    tmp = immediate << 16;
+	    register_acess(rt, tmp, 1);
 		return 0;
 	}
 
