@@ -32,7 +32,13 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="instrctions.h" />
+		<Unit filename="instructions.cpp" />
+		<Unit filename="io.cpp" />
+		<Unit filename="io.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="one_cycle_simulator.cpp" />
+		<Unit filename="one_cycle_simulator.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
