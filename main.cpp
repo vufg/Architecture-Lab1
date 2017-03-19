@@ -8,7 +8,8 @@ int cmd, opcode;
 int imemory[127] = {0};
 int dmemory[127] = {0};
 int reg[31] = {0};
-int pc, num_iimage, num_dimage, sp;
+int pc = 0, hi = 0, lo = 0;
+int num_iimage, num_dimage;
 
 
 int dmemory_acess(int address, int value, int write_enable){
@@ -33,9 +34,25 @@ int register_acess(int address, int value, int write_enable){
 
 /// instruction functions
 
-        ///overflow problem needs to-be-done
+    bool overflow_f(int s, int a, int b){
+        s = s >> 31;
+        a = s >> 31;
+        b = b >> 31;
+        if( !(a ^ b) && (s^a) )
+            return true;
+        else
+            return false;
+    }
+
+
+
     int add(int rs, int rt, int rd){
-        reg[rd] = reg[rs] + reg[rt];
+        int ans = reg[rs] + reg[rt];
+        if (overflow_f(reg[rs], reg[rt],reg[rd]){
+
+        }else{
+            register_acess(rd, ans, 1);
+        }
 		return 0;
 	}
 
@@ -120,14 +137,17 @@ int register_acess(int address, int value, int write_enable){
 	}
 
 	int jump(int address){
+	    pc = address;
 		return 0;
 	}
 
 	int jal(int address){
+	    register_acess(31, pc+4, 1);
+	    pc = address;
 		return 0;
 	}
 
-	int haltf(void){
+	int halt_f(void){
 		return 0;
 	}
 
@@ -304,7 +324,7 @@ int register_acess(int address, int value, int write_enable){
             jal(address);
         }
     }else if(opcode == 0x3f){
-        haltf();
+        halt_f();
     }
     ///I-Type instruction
     else{
@@ -397,9 +417,6 @@ int register_acess(int address, int value, int write_enable){
         return 0;
     }
 
-
-
-
     }
 
 
@@ -424,6 +441,7 @@ int main(){
                     0xFFFFFFFF,
                     0xFFFFFFFF,
                     0xFFFFFFFF};
+
     for(int i = 0; i < num_iimage; i++){
         imemory[i] = iimage[i];
     }
@@ -439,9 +457,6 @@ int main(){
 
 
     ///cin >> hex >> cmd;
-
-
-
 
     cmd << 32-6 >> 32-6;
     ///cout << hex << (cmd << 32-6 >> 32-6) << endl;
