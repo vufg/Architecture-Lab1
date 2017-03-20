@@ -29,13 +29,16 @@ int main(){
     open_input_file();
     input_data_file();
 
-    //do{
+    do{
         cmd = imemory[pc/4];
-        cout << cmd << endl;
+        //cout << cmd << endl;
         output_register();
+        cycle++;
 
-        //one_cycle_simulator(cmd);
-    //}while(!quit_flag);
+        pc_access(pc+4, 1);
+        one_cycle_simulator(cmd);
+
+    }while(!quit_flag);
 
     close_output_file();
 

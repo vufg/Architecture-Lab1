@@ -1,9 +1,9 @@
 # depslib dependency file v1.0
-1489975354 source:c:\users\zhufeng\desktop\architecture-lab1\instructions.cpp
+1490022342 source:c:\users\zhufeng\desktop\architecture-lab1\instructions.cpp
 	"instrctions.h"
 	"io.h"
 
-1489975368 c:\users\zhufeng\desktop\architecture-lab1\instrctions.h
+1490009924 c:\users\zhufeng\desktop\architecture-lab1\instrctions.h
 	<iostream>
 	<string>
 	<cstdio>
@@ -15,14 +15,14 @@
 	<cstdio>
 	<fstream>
 
-1489975161 source:c:\users\zhufeng\desktop\architecture-lab1\io.cpp
+1490022642 source:c:\users\zhufeng\desktop\architecture-lab1\io.cpp
 	"io.h"
 	<iostream>
 	<string>
 	<cstdio>
 	<fstream>
 
-1489971351 source:c:\users\zhufeng\desktop\architecture-lab1\main.cpp
+1490022402 source:c:\users\zhufeng\desktop\architecture-lab1\main.cpp
 	<iostream>
 	<string>
 	<cstdio>
@@ -37,7 +37,7 @@
 	<cstdio>
 	<fstream>
 
-1489933697 source:c:\users\zhufeng\desktop\architecture-lab1\one_cycle_simulator.cpp
+1489992079 source:c:\users\zhufeng\desktop\architecture-lab1\one_cycle_simulator.cpp
 	"one_cycle_simulator.h"
 	"instrctions.h"
 	"io.h"

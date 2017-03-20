@@ -179,46 +179,33 @@
 
 	int sw(int rt, int rs, int immediate){
 	    int tmp, address;
-	    if(rt == 0){
-            register_acess(rt, 0, 1);
-	    }
 
+	    tmp = reg[rt];
 	    address = reg[rs] + immediate;
-	    tmp = dmemory_acess(address, 0, 4, 0);
+	    dmemory_acess(address, tmp, 4, 1);
 
-	    if(rt != 0){
-            register_acess(rt, tmp, 1);
-	    }
 		return 0;
 	}
 
 	int sh(int rt, int rs, int immediate){
 	    int tmp, address;
-	    if(rt == 0){
-            register_acess(rt, 0, 1);
-	    }
 
-	    address = reg[rs] + immediate;
-	    tmp = dmemory_acess(address, 0, 2, 0);
+	    tmp = reg[rt];
 	    tmp = tmp & 0x0000FFFF;
-	    if(rt != 0){
-            register_acess(rt, tmp, 1);
-	    }
+	    address = reg[rs] + immediate;
+	    dmemory_acess(address, tmp, 2, 1);
+
 		return 0;
 	}
 
 	int sb(int rt, int rs, int immediate){
 	    int tmp, address;
-	    if(rt == 0){
-            register_acess(rt, 0, 1);
-	    }
 
-	    address = reg[rs] + immediate;
-	    tmp = dmemory_acess(address, 0, 1, 0);
+	    tmp = reg[rt];
 	    tmp = tmp & 0x000000FF;
-	    if(rt != 0){
-            register_acess(rt, tmp, 1);
-	    }
+	    address = reg[rs] + immediate;
+	    dmemory_acess(address, tmp, 1, 1);
+
 		return 0;
 	}
 
@@ -258,34 +245,6 @@
 	}
 
 	///
-
-	int beq(int rs, int rt, int immediate){
-	    if(reg[rs] == reg[rt]){
-            pc = pc + 4 + immediate * 4;
-            pc_changed = true;
-	    }
-		return 0;
-	}
-
-	int bne(int rs, int rt, int immediate){
-	    if(reg[rs] != reg[rt]){
-            pc_access(pc + 4 + immediate * 4, 1);
-	    }
-		return 0;
-	}
-
-	int bgtz(int rs, int immediate){
-	    if(reg[rs] > 0){
-            pc_access(pc + 4 + immediate * 4, 1);
-	    }
-		return 0;
-	}
-
-	int jr(int rs){
-	    pc_access(reg[rs], 1);
-		return 0;
-	}
-
 	int mult(int rs, int rt){
 	    if(mul_flag){
              fprintf(error_dump , "In cycle %d: Overwrite HI-LO registers\n", cycle);
@@ -320,14 +279,49 @@
 		return 0;
 	}
 
-	int jump(int address){
-	    pc_access(address ,1);
+	///
+
+	int beq(int rs, int rt, int immediate){
+	    if(reg[rs] == reg[rt]){
+            pc_access(pc + immediate * 4, 1);
+	    }
 		return 0;
 	}
 
-	int jal(int address){
-	    register_acess(31, pc+4, 1);
-	    pc_access(address, 1);
+	int bne(int rs, int rt, int immediate){
+	    if(reg[rs] != reg[rt]){
+            pc_access(pc + immediate * 4, 1);
+	    }
+		return 0;
+	}
+
+	int bgtz(int rs, int immediate){
+	    if(reg[rs] > 0){
+            pc_access(pc + immediate * 4, 1);
+	    }
+		return 0;
+	}
+
+
+	int jump(unsigned int address){
+	    unsigned int tmp;
+	    tmp = tmp >> 28 << 28;
+	    tmp = tmp | (address << 2);
+	    pc_access(tmp ,1);
+		return 0;
+	}
+
+	int jal(unsigned int address){
+	    register_acess(31, pc, 1);
+	    unsigned int tmp;
+	    tmp = tmp >> 28 << 28;
+	    tmp = tmp | (address << 2);
+	    pc_access(tmp ,1);
+		return 0;
+	}
+
+	int jr(int rs){
+	    pc_access(reg[rs] * 4, 1);
 		return 0;
 	}
 

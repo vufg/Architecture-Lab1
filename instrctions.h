@@ -49,9 +49,9 @@ extern FILE *snapshot, *error_dump;
 
 	int mflo(int rd);
 
-	int jump(int address);
+	int jump(unsigned int address);
 
-	int jal(int address);
+	int jal(unsigned int address);
 
     ///immediate calculations
 	int addi(int rt, int rs, int immediate);

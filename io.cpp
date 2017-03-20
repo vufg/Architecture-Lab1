@@ -72,8 +72,10 @@ int register_acess(int address, int value, int write_enable){
         return 0;
     }
     if(write_enable){
-        reg[address] = value;
-        reg_changed[address] = true;
+        if(reg[address] != value){
+            reg_changed[address] = true;
+            reg[address] = value;
+        }
         return 0;
     }else{
         return reg[address];
@@ -82,24 +84,32 @@ int register_acess(int address, int value, int write_enable){
 
 int pc_access(int value, int write_enable){
     if(write_enable){
-        pc = value;
-        pc_changed = true;
+        if(pc != value){
+            pc_changed = true;
+            pc = value;
+        }
+
     }
     return 0;
 }
 
 int hi_access(int value, int write_enable){
     if(write_enable){
-        hi = value;
-        hi_changed = true;
+        if(hi != value){
+            hi_changed = true;
+            hi = value;
+        }
+
     }
     return 0;
 }
 
 int lo_access(int value, int write_enable){
     if(write_enable){
-        lo = value;
-        lo_changed = true;
+        if(lo != value){
+            lo = value;
+            lo_changed = true;
+        }
     }
     return 0;
 }
@@ -140,7 +150,7 @@ void input_data_file(void){
 
     //input dimage.bin
     dimage >> std::hex >> inst;
-    register_acess(31, inst, 1);
+    register_acess(29, inst, 1);
 
     //std::cout << std::hex << inst << std::endl;
     //std::cin >> inst;
@@ -151,7 +161,7 @@ void input_data_file(void){
 
     for(unsigned int ii = 0; ii < num_dimage; ii++){
         dimage >> std::hex >> inst;
-        //std::cout << ii << " ~ " << inst << std::endl;
+        //std::cout << ii << " ~ " << std::hex <<inst << std::endl;
         dmemory_acess(ii * 4, inst, 4, 1);
     }
 
@@ -179,26 +189,28 @@ void output_register(void){
     bool no_change = true;
     for(int i = 0; i < 32; i++)
         if(reg_changed[i]){
-            fprintf(snapshot, "$%d: %X\n", i, reg[i]);
+            fprintf(snapshot, "$%.2d: 0x%08X\n", i, reg[i]);
             reg_changed[i] = false;
             no_change = false;
         }
     if(hi_changed){
-        fprintf(snapshot, "$HI: %X\n", hi);
+        fprintf(snapshot, "$HI: 0x%08X\n", hi);
         hi_changed = false;
         no_change = false;
     }
 
     if(lo_changed){
-        fprintf(snapshot, "$LO: %X\n", lo);
+        fprintf(snapshot, "$LO: 0x%08X\n", lo);
         lo_changed = false;
         no_change = false;
     }
 
     if(pc_changed || no_change){
-        fprintf(snapshot, "PC: %X\n", pc);
+        fprintf(snapshot, "PC: 0x%08X\n", pc);
         pc_changed = false;
     }
+
+    fprintf(snapshot, "\n\n");
 
 
 }

@@ -99,7 +99,7 @@ int one_cycle_simulator(int cmd){
 
         address= ((unsigned int)cmd) << 6 >> 6;
         if(opcode == 0x02){
-            jump(address);
+            jump( ((unsigned int)address) );
         }else{
             jal(address);
         }
