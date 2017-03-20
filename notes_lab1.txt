@@ -35,3 +35,7 @@ cout << bitset<32>( (tmp) << 20 >> 20) << endl;
 
 in sw function  if the instruction trys to write $s0, dmemory_access will still be excuted, right?
 
+If the content of any register does not change from the previous cycle, then do not
+output the register. For cases that all registers change no values, then output only the cycle index
+and PC count.
+

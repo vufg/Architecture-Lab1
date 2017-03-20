@@ -88,55 +88,7 @@
 		return 0;
 	}
 
-	int jr(int rs){
-	    pc = reg[rs];
-		return 0;
-	}
 
-	int mult(int rs, int rt){
-	    if(mul_flag){
-             fprintf(error_dump , "In cycle %d: Overwrite HI-LO registers\n", cycle);
-             //printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
-	    }
-	    mul_flag = true;
-	    hi = (int)( ((long long)reg[rs] * (long long)reg[rt]) >> 32);
-        lo = (int)( ((long long)reg[rs] * (long long)reg[rt]) << 32 >> 32);
-        return 0;
-	}
-
-	int multu(int rs, int rt){
-	    if(mul_flag){
-             fprintf(error_dump , "In cycle %d: Overwrite HI-LO registers\n", cycle);
-             //printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
-	    }
-	    mul_flag = true;
-	    hi = (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) >> 32);
-        lo = (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) << 32 >> 32);
-        return 0;
-	}
-
-	int mfhi(int rd){
-	    mul_flag = false;
-	    register_acess(rd, hi, 1);
-		return 0;
-	}
-
-	int mflo(int rd){
-	    mul_flag = false;
-	    register_acess(rd, lo, 1);
-		return 0;
-	}
-
-	int jump(int address){
-	    pc = address;
-		return 0;
-	}
-
-	int jal(int address){
-	    register_acess(31, pc+4, 1);
-	    pc = address;
-		return 0;
-	}
 
     ///immediate calculations
 	int addi(int rt, int rs, int immediate){
@@ -305,24 +257,77 @@
 		return 0;
 	}
 
+	///
+
 	int beq(int rs, int rt, int immediate){
 	    if(reg[rs] == reg[rt]){
             pc = pc + 4 + immediate * 4;
+            pc_changed = true;
 	    }
 		return 0;
 	}
 
 	int bne(int rs, int rt, int immediate){
 	    if(reg[rs] != reg[rt]){
-            pc = pc + 4 + immediate * 4;
+            pc_access(pc + 4 + immediate * 4, 1);
 	    }
 		return 0;
 	}
 
 	int bgtz(int rs, int immediate){
 	    if(reg[rs] > 0){
-            pc = pc + 4 + immediate * 4;
+            pc_access(pc + 4 + immediate * 4, 1);
 	    }
+		return 0;
+	}
+
+	int jr(int rs){
+	    pc_access(reg[rs], 1);
+		return 0;
+	}
+
+	int mult(int rs, int rt){
+	    if(mul_flag){
+             fprintf(error_dump , "In cycle %d: Overwrite HI-LO registers\n", cycle);
+             //printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
+	    }
+	    mul_flag = true;
+	    hi_access( (int)( ((long long)reg[rs] * (long long)reg[rt]) >> 32)      , 1);
+        lo_access( (int)( ((long long)reg[rs] * (long long)reg[rt]) << 32 >> 32), 1);
+        return 0;
+	}
+
+	int multu(int rs, int rt){
+	    if(mul_flag){
+             fprintf(error_dump , "In cycle %d: Overwrite HI-LO registers\n", cycle);
+             //printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
+	    }
+	    mul_flag = true;
+	    hi_access( (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) >> 32) , 1);
+        lo_access( (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) << 32 >> 32), 1 );
+        return 0;
+	}
+
+	int mfhi(int rd){
+	    mul_flag = false;
+	    register_acess(rd, hi, 1);
+		return 0;
+	}
+
+	int mflo(int rd){
+	    mul_flag = false;
+	    register_acess(rd, lo, 1);
+		return 0;
+	}
+
+	int jump(int address){
+	    pc_access(address ,1);
+		return 0;
+	}
+
+	int jal(int address){
+	    register_acess(31, pc+4, 1);
+	    pc_access(address, 1);
 		return 0;
 	}
 

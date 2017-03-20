@@ -12,6 +12,7 @@ extern int mul_flag, quit_flag , cycle;
 extern FILE *snapshot, *error_dump;
 
 
+
     int add(int rd, int rs, int rt);
 
     int addu(int rd, int rs, int rt);

@@ -14,6 +14,7 @@ int imemory[127] = {0}, dmemory[127] = {0}, reg[31] = {0};
 int pc = 0, hi = 0, lo = 0;
 
 int mul_flag = false, quit_flag = false, cycle = 0;
+bool reg_changed[32], hi_changed, lo_changed, pc_changed;
 
 FILE *snapshot, *error_dump;
 
@@ -28,10 +29,13 @@ int main(){
     open_input_file();
     input_data_file();
 
-    do{
+    //do{
         cmd = imemory[pc/4];
-        one_cycle_simulator(cmd);
-    }while(!quit_flag);
+        cout << cmd << endl;
+        output_register();
+
+        //one_cycle_simulator(cmd);
+    //}while(!quit_flag);
 
     close_output_file();
 

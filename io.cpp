@@ -73,11 +73,40 @@ int register_acess(int address, int value, int write_enable){
     }
     if(write_enable){
         reg[address] = value;
+        reg_changed[address] = true;
         return 0;
     }else{
         return reg[address];
     }
 }
+
+int pc_access(int value, int write_enable){
+    if(write_enable){
+        pc = value;
+        pc_changed = true;
+    }
+    return 0;
+}
+
+int hi_access(int value, int write_enable){
+    if(write_enable){
+        hi = value;
+        hi_changed = true;
+    }
+    return 0;
+}
+
+int lo_access(int value, int write_enable){
+    if(write_enable){
+        lo = value;
+        lo_changed = true;
+    }
+    return 0;
+}
+
+
+
+
 
 bool overflow_f(int s, int a, int b){
         s = s >> 31;
@@ -96,6 +125,15 @@ void input_data_file(void){
     const char *ifile = "iimage.bin";
     const char *dfile = "dimage.bin";
     unsigned int inst;
+    unsigned int num_dimage;
+    unsigned int num_iimage;
+
+    //initial several change marks to prepare for snapshot.rpt
+    for(int i = 0; i < 32; i++)
+        reg_changed[i] = true;
+    hi_changed = true;
+    lo_changed = true;
+    pc_changed = true;
 
     std::ifstream iimage(ifile, std::fstream::in);
     std::ifstream dimage(dfile, std::fstream::in);
@@ -103,31 +141,66 @@ void input_data_file(void){
     //input dimage.bin
     dimage >> std::hex >> inst;
     register_acess(31, inst, 1);
-    dimage >> std::hex >> inst;
-    int num_dimage = inst;
 
-    for(int ii = 0; ii < num_dimage; ii++){
+    //std::cout << std::hex << inst << std::endl;
+    //std::cin >> inst;
+
+    dimage >> std::hex >> inst;
+    num_dimage = inst;
+
+
+    for(unsigned int ii = 0; ii < num_dimage; ii++){
         dimage >> std::hex >> inst;
+        //std::cout << ii << " ~ " << inst << std::endl;
         dmemory_acess(ii * 4, inst, 4, 1);
     }
 
     //input iimage.bin
     iimage >> std::hex >> inst;
     pc = inst;
+    //std::cout << "pc: " << pc << "\n";
+
     iimage >> std::hex >> inst;
-    int num_iimage = inst;
+    num_iimage = inst;
+    //std::cout << "num_iimage: " << num_iimage << "\n";
 
     for(int ii = 0; ii < num_iimage; ii++){
         iimage >> std::hex >> inst;
+        //std::cout << ii << "  ";
+        //std::cout << std::hex << inst << "\n";
         imemory[ii] = inst;
     }
 
-
-    ///fprintf(error_dump, "%X\n", inst);
-
-    ///fprintf(snapshot, "%X\n", inst);}
-
     return ;
+}
+
+void output_register(void){
+    fprintf(snapshot, "cycle %d\n", cycle);
+    bool no_change = true;
+    for(int i = 0; i < 32; i++)
+        if(reg_changed[i]){
+            fprintf(snapshot, "$%d: %X\n", i, reg[i]);
+            reg_changed[i] = false;
+            no_change = false;
+        }
+    if(hi_changed){
+        fprintf(snapshot, "$HI: %X\n", hi);
+        hi_changed = false;
+        no_change = false;
+    }
+
+    if(lo_changed){
+        fprintf(snapshot, "$LO: %X\n", lo);
+        lo_changed = false;
+        no_change = false;
+    }
+
+    if(pc_changed || no_change){
+        fprintf(snapshot, "PC: %X\n", pc);
+        pc_changed = false;
+    }
+
+
 }
 
 void close_output_file(void){
