@@ -9,20 +9,20 @@
 	<cstdio>
 	<fstream>
 
-1489975158 c:\users\zhufeng\desktop\architecture-lab1\io.h
+1490101371 c:\users\zhufeng\desktop\architecture-lab1\io.h
 	<iostream>
 	<string>
 	<cstdio>
 	<fstream>
 
-1490022642 source:c:\users\zhufeng\desktop\architecture-lab1\io.cpp
+1490101422 source:c:\users\zhufeng\desktop\architecture-lab1\io.cpp
 	"io.h"
 	<iostream>
 	<string>
 	<cstdio>
 	<fstream>
 
-1490022402 source:c:\users\zhufeng\desktop\architecture-lab1\main.cpp
+1490101575 source:c:\users\zhufeng\desktop\architecture-lab1\main.cpp
 	<iostream>
 	<string>
 	<cstdio>
@@ -31,7 +31,7 @@
 	"io.h"
 	"one_cycle_simulator.h"
 
-1489933234 c:\users\zhufeng\desktop\architecture-lab1\one_cycle_simulator.h
+1490101377 c:\users\zhufeng\desktop\architecture-lab1\one_cycle_simulator.h
 	<iostream>
 	<string>
 	<cstdio>

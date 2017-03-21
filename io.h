@@ -7,7 +7,8 @@
 #include <fstream>
 
 
-extern int imemory[127], dmemory[127], reg[31];
+extern int imemory[127];
+extern int dmemory[127], reg[31];
 extern int pc, hi, lo;
 extern int mul_flag, quit_flag , cycle;
 extern FILE *snapshot, *error_dump;
@@ -21,6 +22,7 @@ int hi_access(int value, int write_enable);
 int lo_access(int value, int write_enable);
 
 
+unsigned int change_endian(unsigned int num);
 bool overflow_f(int s, int a, int b);
 void output_register(void);
 

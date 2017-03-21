@@ -130,13 +130,20 @@ bool overflow_f(int s, int a, int b){
         return false;
 }
 
+
+unsigned int change_endian(unsigned int num){
+    unsigned int ans = 0;
+    //cout << bitset<32>(num) << endl << endl;
+    for(int i = 0; i < 4; i++){
+        ans = ans | (num << (i << 3) >> 24 << (i << 3));
+    }
+    return ans;
+}
+
 void input_data_file(void){
 
-    const char *ifile = "iimage.bin";
-    const char *dfile = "dimage.bin";
-    unsigned int inst;
-    unsigned int num_dimage;
-    unsigned int num_iimage;
+    FILE *iimage_file, *dimage_file;
+    unsigned int inst, num_dimage, num_iimage;
 
     //initial several change marks to prepare for snapshot.rpt
     for(int i = 0; i < 32; i++)
@@ -145,41 +152,44 @@ void input_data_file(void){
     lo_changed = true;
     pc_changed = true;
 
-    std::ifstream iimage(ifile, std::fstream::in);
-    std::ifstream dimage(dfile, std::fstream::in);
 
-    //input dimage.bin
-    dimage >> std::hex >> inst;
-    register_acess(29, inst, 1);
 
-    //std::cout << std::hex << inst << std::endl;
-    //std::cin >> inst;
+    //open input files
+    iimage_file = fopen("iimage.bin", "rb+");
+    dimage_file = fopen("dimage.bin", "rb+");
 
-    dimage >> std::hex >> inst;
-    num_dimage = inst;
 
+    fread(&inst, sizeof(unsigned int), 1, dimage_file);
+    register_acess(29, change_endian(inst), 1);
+    //printf("0x%08X\n", change_endian(inst));
+
+    fread(&inst, sizeof(unsigned int), 1, dimage_file);
+    num_dimage = change_endian(inst);
 
     for(unsigned int ii = 0; ii < num_dimage; ii++){
-        dimage >> std::hex >> inst;
-        //std::cout << ii << " ~ " << std::hex <<inst << std::endl;
-        dmemory_acess(ii * 4, inst, 4, 1);
+        fread(&inst, sizeof(unsigned int), 1, dimage_file);
+        dmemory_acess(ii * 4, change_endian(inst), 4, 1);
     }
 
     //input iimage.bin
-    iimage >> std::hex >> inst;
-    pc = inst;
-    //std::cout << "pc: " << pc << "\n";
+    fread(&inst, sizeof(unsigned int), 1, iimage_file);
+    pc = change_endian(inst);
 
-    iimage >> std::hex >> inst;
-    num_iimage = inst;
-    //std::cout << "num_iimage: " << num_iimage << "\n";
+    fread(&inst, sizeof(unsigned int), 1, iimage_file);
+    num_iimage = change_endian(inst);
 
-    for(int ii = 0; ii < num_iimage; ii++){
-        iimage >> std::hex >> inst;
-        //std::cout << ii << "  ";
-        //std::cout << std::hex << inst << "\n";
-        imemory[ii] = inst;
+
+    std::cout << "iimage\n\n";
+    for(unsigned int ii = 0; ii < num_iimage; ii++){
+        fread(&inst, sizeof(unsigned int), 1, iimage_file);
+        imemory[pc/4 + ii] = change_endian(inst);
+        std::cout << ii << ":  " << std::hex << imemory[ii] << "\n";
     }
+    std::cout << "\n\n\n wait...\n";
+    int sw;
+    std::cin >> sw;
+    fclose(iimage_file);
+    fclose(dimage_file);
 
     return ;
 }

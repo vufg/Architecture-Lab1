@@ -9,8 +9,8 @@
 
 using namespace std;
 
-
-int imemory[127] = {0}, dmemory[127] = {0}, reg[31] = {0};
+int imemory[127] = {0};
+int dmemory[127] = {0}, reg[31] = {0};
 int pc = 0, hi = 0, lo = 0;
 
 int mul_flag = false, quit_flag = false, cycle = 0;
@@ -18,7 +18,7 @@ bool reg_changed[32], hi_changed, lo_changed, pc_changed;
 
 FILE *snapshot, *error_dump;
 
-void open_input_file(void){
+void open_output_file(void){
     snapshot = fopen("snapshot.rpt", "w+");
     error_dump = fopen("error_dump.rpt", "w+");
 }
@@ -26,16 +26,20 @@ void open_input_file(void){
 
 int main(){
     int cmd;
-    open_input_file();
+    open_output_file();
     input_data_file();
+    int sw;
 
     do{
-        cmd = imemory[pc/4];
-        //cout << cmd << endl;
         output_register();
-        cycle++;
+        cmd = imemory[pc/4];
+
+        cout << "cycle: " << cycle << "  " << cmd << endl << endl;
+        cin >> sw;
+        cout << endl;
 
         pc_access(pc+4, 1);
+        cycle++;
         one_cycle_simulator(cmd);
 
     }while(!quit_flag);
