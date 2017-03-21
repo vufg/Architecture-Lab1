@@ -28,15 +28,17 @@ int main(){
     int cmd;
     open_output_file();
     input_data_file();
+    cout << "reg[0]" << hex << dmemory[0] << endl << endl;
     int sw;
 
     do{
         output_register();
         cmd = imemory[pc/4];
+        cout << reg[0] << endl;
 
-        cout << "cycle: " << cycle << "  " << cmd << endl << endl;
-        cin >> sw;
-        cout << endl;
+       // cout << "cycle: " << cycle << "  " << cmd << endl << endl;
+        //cin >> sw;
+        //cout << endl;
 
         pc_access(pc+4, 1);
         cycle++;

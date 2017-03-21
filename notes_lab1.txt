@@ -41,3 +41,5 @@ and PC count.
 
 load iimage address overflow
 
+immediate sometimes is signed and sometimes is unsigned
+

@@ -104,6 +104,38 @@
 		return 0;
 	}
 
+	int andi(int rt, int rs, int immediate){
+	    int ans;
+	    ans = reg[rs] & immediate;
+	    register_acess(rt, ans, 1);
+		return 0;
+	}
+
+	int ori(int rt, int rs, int immediate){
+	    int ans;
+	    ans = reg[rs] | immediate;
+	    register_acess(rt, ans, 1);
+		return 0;
+	}
+
+	int nori(int rt, int rs, int immediate){
+	    int ans;
+	    ans = ~(reg[rs] | immediate);
+	    register_acess(rt, ans, 1);
+		return 0;
+	}
+
+	int slti(int rt, int rs, int immediate){
+	    int ans;
+	    ans = reg[rs] < immediate;
+	    register_acess(rt, ans, 1);
+		return 0;
+	}
+
+
+	//memory access instructions
+
+
 	int lw(int rt, int rs, int immediate){
 	    int tmp;
 	    ///error detection of write register zero is prior to other error detections
@@ -126,6 +158,7 @@
 
 	    address = reg[rs] + immediate;
 	    tmp = dmemory_acess(address, 0, 2, 0);
+	    tmp = ((tmp & 0x000000FF) << 8) | ((tmp & 0x0000FF00) >> 8);
 	    tmp = tmp << 16 >> 16;
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
@@ -141,6 +174,7 @@
 
 	    address = reg[rs] + immediate;
 	    tmp = dmemory_acess(address, 0, 2, 0);
+	    tmp = ((tmp & 0x000000FF) << 8) | ((tmp & 0x0000FF00) >> 8);
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
 	    }
@@ -216,33 +250,6 @@
 		return 0;
 	}
 
-	int andi(int rt, int rs, int immediate){
-	    int ans;
-	    ans = reg[rs] & immediate;
-	    register_acess(rt, ans, 1);
-		return 0;
-	}
-
-	int ori(int rt, int rs, int immediate){
-	    int ans;
-	    ans = reg[rs] | immediate;
-	    register_acess(rt, ans, 1);
-		return 0;
-	}
-
-	int nori(int rt, int rs, int immediate){
-	    int ans;
-	    ans = ~(reg[rs] | immediate);
-	    register_acess(rt, ans, 1);
-		return 0;
-	}
-
-	int slti(int rt, int rs, int immediate){
-	    int ans;
-	    ans = reg[rs] < immediate;
-	    register_acess(rt, ans, 1);
-		return 0;
-	}
 
 	///
 	int mult(int rs, int rt){

@@ -168,7 +168,8 @@ void input_data_file(void){
 
     for(unsigned int ii = 0; ii < num_dimage; ii++){
         fread(&inst, sizeof(unsigned int), 1, dimage_file);
-        dmemory_acess(ii * 4, change_endian(inst), 4, 1);
+        //dmemory_acess(ii * 4, change_endian(inst), 4, 1);
+        dmemory_acess(ii * 4, inst, 4, 1);
     }
 
     //input iimage.bin
@@ -179,15 +180,17 @@ void input_data_file(void){
     num_iimage = change_endian(inst);
 
 
-    std::cout << "iimage\n\n";
+    //std::cout << "iimage\n\n";
     for(unsigned int ii = 0; ii < num_iimage; ii++){
         fread(&inst, sizeof(unsigned int), 1, iimage_file);
         imemory[pc/4 + ii] = change_endian(inst);
         std::cout << ii << ":  " << std::hex << imemory[ii] << "\n";
     }
-    std::cout << "\n\n\n wait...\n";
-    int sw;
-    std::cin >> sw;
+
+    //std::cout << "\n\n\n wait...\n";
+    //int sw;
+    //std::cin >> sw;
+
     fclose(iimage_file);
     fclose(dimage_file);
 

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1490022342 source:c:\users\zhufeng\desktop\architecture-lab1\instructions.cpp
+1490104794 source:c:\users\zhufeng\desktop\architecture-lab1\instructions.cpp
 	"instrctions.h"
 	"io.h"
 
@@ -15,14 +15,14 @@
 	<cstdio>
 	<fstream>
 
-1490101422 source:c:\users\zhufeng\desktop\architecture-lab1\io.cpp
+1490102697 source:c:\users\zhufeng\desktop\architecture-lab1\io.cpp
 	"io.h"
 	<iostream>
 	<string>
 	<cstdio>
 	<fstream>
 
-1490101575 source:c:\users\zhufeng\desktop\architecture-lab1\main.cpp
+1490102731 source:c:\users\zhufeng\desktop\architecture-lab1\main.cpp
 	<iostream>
 	<string>
 	<cstdio>
