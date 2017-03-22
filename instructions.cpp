@@ -327,7 +327,7 @@
 	}
 
 	int jr(int rs){
-	    pc_access(reg[rs] * 4, 1);
+	    pc_access(reg[rs], 1);
 		return 0;
 	}
 

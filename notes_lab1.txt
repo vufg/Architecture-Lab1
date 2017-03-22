@@ -45,7 +45,6 @@ immediate sometimes is signed and sometimes is unsigned
 
 addiu $t = $s + C  $s signed or unsigned?
 
-
 1.在儲存instruction的時候，1k的imemory是把pc initial value當作第一個word還是把$0當作第一個word?
 2.如果在儲存instruction的過程中超過了1k的imemory，應該把之前的overwrite?
 3.1k的imemory, pc->0?
