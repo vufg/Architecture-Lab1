@@ -99,28 +99,29 @@
 	}
 
 	int addiu(int rt, int rs, int immediate){
-		unsigned int ans = (unsigned)reg[rs]  + (unsigned int)immediate;
+		int ans;
+        ans = reg[rs]  + (((unsigned int)immediate)&0x00FF);
         register_acess(rt, ans, 1);
 		return 0;
 	}
 
 	int andi(int rt, int rs, int immediate){
 	    int ans;
-	    ans = reg[rs] & immediate;
+	    ans = reg[rs] & (((unsigned int)immediate)&0x00FF);
 	    register_acess(rt, ans, 1);
 		return 0;
 	}
 
 	int ori(int rt, int rs, int immediate){
 	    int ans;
-	    ans = reg[rs] | immediate;
+	    ans = reg[rs] | (((unsigned int)immediate)&0x00FF);
 	    register_acess(rt, ans, 1);
 		return 0;
 	}
 
 	int nori(int rt, int rs, int immediate){
 	    int ans;
-	    ans = ~(reg[rs] | immediate);
+	    ans = ~(reg[rs] | (((unsigned int)immediate)&0x00FF));
 	    register_acess(rt, ans, 1);
 		return 0;
 	}
@@ -158,7 +159,6 @@
 
 	    address = reg[rs] + immediate;
 	    tmp = dmemory_acess(address, 0, 2, 0);
-	    tmp = ((tmp & 0x000000FF) << 8) | ((tmp & 0x0000FF00) >> 8);
 	    tmp = tmp << 16 >> 16;
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
@@ -174,7 +174,6 @@
 
 	    address = reg[rs] + immediate;
 	    tmp = dmemory_acess(address, 0, 2, 0);
-	    tmp = ((tmp & 0x000000FF) << 8) | ((tmp & 0x0000FF00) >> 8);
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
 	    }

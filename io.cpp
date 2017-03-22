@@ -4,7 +4,11 @@
 #include <cstdio>
 #include <fstream>
 
+//no matter many bytes dmemory_access get or return
+//always in unsigned int form
+//all 0 in the left for half word or byte operation
 int dmemory_acess(int address, int value, int len, int write_enable){
+
     if(address < 0 || address > 1023){
         fprintf(error_dump , "In cycle %d: Address Overflow\n", cycle);
         //printf("In cycle %d: Address Overflow\n", cycle);
@@ -31,34 +35,34 @@ int dmemory_acess(int address, int value, int len, int write_enable){
         if(write_enable)
         {
             if(address % 4 == 2){
+                tmp = tmp & 0xFFFF0000;
+                tmp = tmp | (value & 0x0000FFFF);
+            }else{
                 tmp = tmp & 0x0000FFFF;
                 tmp = tmp | (value << 16);
-            }else{
-                tmp = tmp & 0xFFFF0000;
-                tmp = tmp | value;
             }
             dmemory[address/4] = tmp;
         }else
         {
             if(address % 4 == 2){
-                return ((unsigned int)tmp) >> 16;
-            }else{
                 return ((unsigned int)tmp) << 16 >> 16;
+            }else{
+                return ((unsigned int)tmp) >> 16;
             }
         }
 
     }else if(len == 1){
         int shift = address % 4;
         if(write_enable){
-            int mask = 0x000000FF;
-            mask = mask << (shift * 8);
+            int mask = 0xFF000000;
+            mask = mask >> (shift * 8);
             mask = ~mask;
             tmp = tmp & mask;
             value = value & 0x000000FF;
-            tmp = tmp | (value << (shift * 8));
+            tmp = tmp | (value << ((3 - shift) * 8));
             dmemory[address/4] = tmp;
         }else{
-            return ((unsigned int)tmp) << ( (3 - shift) * 8) >> 24;
+            return ((unsigned int)tmp) << ( shift * 8) >> 24;
         }
     }
     return 0;
@@ -165,12 +169,15 @@ void input_data_file(void){
 
     fread(&inst, sizeof(unsigned int), 1, dimage_file);
     num_dimage = change_endian(inst);
+    //printf("num_dimage: %X\n", num_dimage);
+    //printf("inst: %X\n", inst);
 
     for(unsigned int ii = 0; ii < num_dimage; ii++){
         fread(&inst, sizeof(unsigned int), 1, dimage_file);
         //dmemory_acess(ii * 4, change_endian(inst), 4, 1);
-        dmemory_acess(ii * 4, inst, 4, 1);
+        dmemory_acess(ii * 4, change_endian(inst), 4, 1);
     }
+
 
     //input iimage.bin
     fread(&inst, sizeof(unsigned int), 1, iimage_file);
@@ -184,7 +191,7 @@ void input_data_file(void){
     for(unsigned int ii = 0; ii < num_iimage; ii++){
         fread(&inst, sizeof(unsigned int), 1, iimage_file);
         imemory[pc/4 + ii] = change_endian(inst);
-        std::cout << ii << ":  " << std::hex << imemory[ii] << "\n";
+        //std::cout << ii << ":  " << std::hex << imemory[ii] << "\n";
     }
 
     //std::cout << "\n\n\n wait...\n";

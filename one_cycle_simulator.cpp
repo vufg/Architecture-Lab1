@@ -58,7 +58,10 @@ int one_cycle_simulator(int cmd){
 
 
         case 0x00:
-            sll(rd, rt, shamt);
+            if(cmd != 0){
+                sll(rd, rt, shamt);
+            }
+
             break;
 
         case 0x02:
@@ -90,7 +93,11 @@ int one_cycle_simulator(int cmd){
             mflo(rd);
             break;
 
-        //default:
+        default:
+            printf("illegal instruction found at 0x%08X\n", pc - 4);
+            quit_flag = true;
+            return 0;
+
         }
     }
     /// J-Type instruction
@@ -114,7 +121,7 @@ int one_cycle_simulator(int cmd){
         int rs, rt, immediate;
         rs = ((unsigned int)cmd) << 6 >> 27;
         rt = ((unsigned int)cmd) << 11 >> 27;
-        immediate = ((unsigned int)cmd) << 16 >> 16;
+        immediate = (cmd) << 16 >> 16;
 
 
         switch (opcode){
@@ -197,7 +204,7 @@ int one_cycle_simulator(int cmd){
         //default:
         }
     }else{
-            printf("illegal instruction found at %X\n", pc);
+            printf("illegal instruction found at 0x%08X\n", pc - 4);
             quit_flag = true;
         }
         return 0;
