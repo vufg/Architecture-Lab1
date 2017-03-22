@@ -72,7 +72,7 @@ int register_acess(int address, int value, int write_enable){
 
     if(address == 0 and write_enable){
         fprintf(error_dump , "In cycle %d: Write $0 Error\n", cycle);
-        printf("In cycle %d: Write $0 Error\n", cycle);
+        //printf("In cycle %d: Write $0 Error\n", cycle);
         return 0;
     }
     if(write_enable){

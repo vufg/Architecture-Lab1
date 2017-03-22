@@ -45,7 +45,19 @@ immediate sometimes is signed and sometimes is unsigned
 
 addiu $t = $s + C  $s signed or unsigned?
 
+mult $s0, $s1
+mfhi $zero
+multu $s0, $s1
+
+上课问：
+addi addiu
+ori andi nori compare with 0xffff -->  0xffffffff or 0x0000ffff
+
+rd x part, if other number appear, report error or not ?
+
 1.在儲存instruction的時候，1k的imemory是把pc initial value當作第一個word還是把$0當作第一個word?
 2.如果在儲存instruction的過程中超過了1k的imemory，應該把之前的overwrite?
 3.1k的imemory, pc->0?
 4.如果pc超過了沒有儲存instruction的dmemory的話應該怎麽辦呢？
+
+

@@ -10,8 +10,10 @@
 	}
 
 	int addu(int rd, int rs, int rt){
-        unsigned int ans;
-        ans = (unsigned)reg[rs] + (unsigned)reg[rt];
+        //unsigned int ans;
+        int ans;
+        //ans = (unsigned)reg[rs] + (unsigned)reg[rt];
+        ans = reg[rs] + reg[rt];
         register_acess(rd, ans, 1);
 		return 0;
 	}
@@ -100,28 +102,29 @@
 
 	int addiu(int rt, int rs, int immediate){
 		int ans;
-        ans = reg[rs]  + (((unsigned int)immediate)&0x00FF);
+        //ans = reg[rs]  + (((unsigned int)immediate)&0x0000FFFF);???
+        ans = reg[rs]  + immediate;
         register_acess(rt, ans, 1);
 		return 0;
 	}
 
 	int andi(int rt, int rs, int immediate){
 	    int ans;
-	    ans = reg[rs] & (((unsigned int)immediate)&0x00FF);
+	    ans = reg[rs] & (((unsigned int)immediate)&0x0000FFFF);///???
 	    register_acess(rt, ans, 1);
 		return 0;
 	}
 
 	int ori(int rt, int rs, int immediate){
 	    int ans;
-	    ans = reg[rs] | (((unsigned int)immediate)&0x00FF);
+	    ans = reg[rs] | (((unsigned int)immediate)&0x0000FFFF);
 	    register_acess(rt, ans, 1);
 		return 0;
 	}
 
 	int nori(int rt, int rs, int immediate){
 	    int ans;
-	    ans = ~(reg[rs] | (((unsigned int)immediate)&0x00FF));
+	    ans = ~(reg[rs] | (((unsigned int)immediate)&0x0000FFFF));
 	    register_acess(rt, ans, 1);
 		return 0;
 	}
@@ -257,8 +260,11 @@
              //printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
 	    }
 	    mul_flag = true;
-	    hi_access( (int)( ((long long)reg[rs] * (long long)reg[rt]) >> 32)      , 1);
-        lo_access( (int)( ((long long)reg[rs] * (long long)reg[rt]) << 32 >> 32), 1);
+	    long long ans = reg[rs] * reg[rt];
+	    hi_access( (int)( ((long long)ans) >> 32) , 1);
+	    lo_access( (int)( ((long long)ans) << 32 >> 64) , 1);
+	    //hi_access( (int)( (((long long)reg[rs]) * ((long long)reg[rt])) >> 32)      , 1);
+        //lo_access( (int)( (((long long)reg[rs]) * ((long long)reg[rt]) << 32 >> 32), 1);
         return 0;
 	}
 
@@ -268,8 +274,12 @@
              //printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
 	    }
 	    mul_flag = true;
-	    hi_access( (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) >> 32) , 1);
-        lo_access( (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) << 32 >> 32), 1 );
+	    int64_t ans;
+	    ans = ((reg[rs]) * (reg[rt]));
+	    hi_access( (int)(ans >> 32), 1);
+	    lo_access( (int)(ans << 32 >> 64),1);
+	    //hi_access( (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) >> 32) , 1);
+        //lo_access( (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) << 32 >> 32), 1 );
         return 0;
 	}
 
@@ -311,7 +321,7 @@
 
 	int jump(unsigned int address){
 	    unsigned int tmp;
-	    tmp = tmp >> 28 << 28;
+	    tmp = pc >> 28 << 28;
 	    tmp = tmp | (address << 2);
 	    pc_access(tmp ,1);
 		return 0;
@@ -320,7 +330,7 @@
 	int jal(unsigned int address){
 	    register_acess(31, pc, 1);
 	    unsigned int tmp;
-	    tmp = tmp >> 28 << 28;
+	    tmp = pc >> 28 << 28;
 	    tmp = tmp | (address << 2);
 	    pc_access(tmp ,1);
 		return 0;
