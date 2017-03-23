@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1490188164 source:c:\users\zhufeng\desktop\architecture-lab1\instructions.cpp
+1490263701 source:c:\users\zhufeng\desktop\architecture-lab1\instructions.cpp
 	"instrctions.h"
 	"io.h"
+	<bitset>
 
 1490183481 c:\users\zhufeng\desktop\architecture-lab1\instrctions.h
 	<iostream>

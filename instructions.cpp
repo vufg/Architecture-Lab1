@@ -1,6 +1,6 @@
 #include "instrctions.h"
 #include "io.h"
-
+#include <bitset>
     // instruction functions
     int add(int rd, int rs, int rt){
         int ans = reg[rs] + reg[rt];
@@ -261,8 +261,11 @@
 	    }
 	    mul_flag = true;
 	    long long ans = reg[rs] * reg[rt];
-	    hi_access( (int)( ((long long)ans) >> 32) , 1);
-	    lo_access( (int)( ((long long)ans) << 32 >> 64) , 1);
+	    hi_access( (int)(ans >> 32) , 1);
+	    lo_access( (int)(ans << 32 >> 32) , 1);
+	    //std::cout << "ans: " << ans << "\n";
+	    //printf("hi %d\n",(int)(ans << 32 >> 64));
+	    //printf("lo %d\n", (int)(ans >> 32));
 	    //hi_access( (int)( (((long long)reg[rs]) * ((long long)reg[rt])) >> 32)      , 1);
         //lo_access( (int)( (((long long)reg[rs]) * ((long long)reg[rt]) << 32 >> 32), 1);
         return 0;
@@ -274,10 +277,21 @@
              //printf("In cycle %d: Overwrite HI-LO registers\n", cycle);
 	    }
 	    mul_flag = true;
-	    int64_t ans;
-	    ans = ((reg[rs]) * (reg[rt]));
-	    hi_access( (int)(ans >> 32), 1);
-	    lo_access( (int)(ans << 32 >> 64),1);
+	    int64_t a,b,c,d;
+        int e,f;
+        a = (unsigned int)reg[rs];
+        //std::cout << "hi: " << std::bitset<64>(a) << "\n";
+        //std::cout << "lo: " << std::bitset<64>(b) << "\n";
+        b = (unsigned int)reg[rt];
+        c = ((int64_t)( a * b)) >> 32;
+        d = ((int64_t)( a * b)) << 32 >> 32;
+        e = c;
+        f = d;
+        //std::cout << "hi: " << std::bitset<32>(e) << "\n";
+        //std::cout << "lo: " << std::bitset<32>(f) << "\n";
+
+	    hi_access(e,1);
+	    lo_access(f,1);
 	    //hi_access( (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) >> 32) , 1);
         //lo_access( (unsigned int)( ((unsigned long long)reg[rs] * (unsigned long long)reg[rt]) << 32 >> 32), 1 );
         return 0;
