@@ -16,6 +16,10 @@ int one_cycle_simulator(int cmd){
         rd = ((unsigned int)cmd) << 16 >> 27;
         shamt = ((unsigned int)cmd) << 21 >> 27;
         funct = ((unsigned int)cmd) << 26 >> 26;
+        //if(cycle == 92 || cycle == 94){
+          //  std::cout << "cycle " << cycle << ": \n";
+           // std::cout << "reg[1]: " << reg[1] << "  reg[2]: " << reg[2] << "\n\n";
+        //}
 
         switch (funct){
         case 0x20:
@@ -58,7 +62,7 @@ int one_cycle_simulator(int cmd){
 
 
         case 0x00:
-            if(cmd != 0){
+            if( rt || rd || shamt){
                 sll(rd, rt, shamt);
             }
 
@@ -122,7 +126,6 @@ int one_cycle_simulator(int cmd){
         rs = ((unsigned int)cmd) << 6 >> 27;
         rt = ((unsigned int)cmd) << 11 >> 27;
         immediate = (cmd) << 16 >> 16;
-
 
         switch (opcode){
         case 0x08:

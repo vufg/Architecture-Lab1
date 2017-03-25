@@ -55,6 +55,8 @@ ori andi nori compare with 0xffff -->  0xffffffff or 0x0000ffff
 
 rd x part, if other number appear, report error or not ?
 
+number overflow appears in all addition calculation
+
 1.在儲存instruction的時候，1k的imemory是把pc initial value當作第一個word還是把$0當作第一個word?
 2.如果在儲存instruction的過程中超過了1k的imemory，應該把之前的overwrite?
 3.1k的imemory, pc->0?

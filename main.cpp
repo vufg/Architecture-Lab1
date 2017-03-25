@@ -28,18 +28,15 @@ int main(){
     int cmd;
     open_output_file();
     input_data_file();
-    int sv;
+    //int sv;
 
     do{
         output_register();
         cmd = imemory[pc/4];
 
         if(false){
-            cout << "cycle: " << cycle << "  " << hex << cmd << endl << endl;
-            cin >> sv;
-            cout << endl;
+            printf("cycle %d: 0x%08X \n", cycle+1, cmd);
         }
-
 
         pc_access(pc+4, 1);
         cycle++;

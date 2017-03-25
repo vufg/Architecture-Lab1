@@ -24,7 +24,8 @@ int lo_access(int value, int write_enable);
 
 
 unsigned int change_endian(unsigned int num);
-bool overflow_f(int s, int a, int b);
+
+bool overflow_f(int a, int b, int error_drop);
 void output_register(void);
 
 void input_data_file(void);

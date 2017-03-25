@@ -4,8 +4,13 @@
     // instruction functions
     int add(int rd, int rs, int rt){
         int ans = reg[rs] + reg[rt];
+        //of_tmp is the temporary variable to detect overflow error
+        int of_tmp1, of_tmp2;
+        of_tmp1 = reg[rs];
+        of_tmp2 = reg[rt];
+
         register_acess(rd, ans, 1);
-        overflow_f(ans, reg[rs], reg[rt]);
+        overflow_f(of_tmp1, of_tmp2, 1);
 		return 0;
 	}
 
@@ -19,9 +24,13 @@
 	}
 
 	int sub(int rd, int rs, int rt){
+	    int of_tmp1, of_tmp2;
+        of_tmp1 = reg[rs];
+        of_tmp2 = -reg[rt];
+
         int ans = reg[rs] - reg[rt];
         register_acess(rd, ans, 1);
-        overflow_f(ans, reg[rs], reg[rt]);
+        overflow_f(of_tmp1, of_tmp2, 1);
 		return 0;
 	}
 
@@ -95,8 +104,12 @@
     ///immediate calculations
 	int addi(int rt, int rs, int immediate){
 	    int ans = reg[rs] + immediate;
+	    int of_tmp1, of_tmp2;
+        of_tmp1 = reg[rs];
+        of_tmp2 = immediate;
+
         register_acess(rt, ans, 1);
-        overflow_f(ans, reg[rs], immediate);
+        overflow_f(of_tmp1, of_tmp2, 1);
 		return 0;
 	}
 
@@ -146,7 +159,7 @@
 	    if(rt == 0){
             register_acess(rt, 0, 1);
 	    }
-
+	    overflow_f(reg[rs], immediate, 1);
 	    tmp = dmemory_acess(reg[rs] + immediate, 0, 4, 0);
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
@@ -159,9 +172,11 @@
 	    if(rt == 0){
             register_acess(rt, 0, 1);
 	    }
-
 	    address = reg[rs] + immediate;
+	    overflow_f(reg[rs], immediate, 1);
+
 	    tmp = dmemory_acess(address, 0, 2, 0);
+
 	    tmp = tmp << 16 >> 16;
 	    if(rt != 0){
             register_acess(rt, tmp, 1);
@@ -175,6 +190,7 @@
             register_acess(rt, 0, 1);
 	    }
 
+	    overflow_f(reg[rs], immediate, 1);
 	    address = reg[rs] + immediate;
 	    tmp = dmemory_acess(address, 0, 2, 0);
 	    if(rt != 0){
@@ -188,6 +204,7 @@
 	    if(rt == 0){
             register_acess(rt, 0, 1);
 	    }
+	    overflow_f(reg[rs], immediate, 1);
 
 	    address = reg[rs] + immediate;
 	    tmp = dmemory_acess(address, 0, 1, 0);
@@ -203,6 +220,7 @@
 	    if(rt == 0){
             register_acess(rt, 0, 1);
 	    }
+	    overflow_f(reg[rs], immediate, 1);
 
 	    address = reg[rs] + immediate;
 	    tmp = dmemory_acess(address, 0, 1, 0);
@@ -217,6 +235,7 @@
 	    int tmp, address;
 
 	    tmp = reg[rt];
+	    overflow_f(reg[rs], immediate, 1);
 	    address = reg[rs] + immediate;
 	    dmemory_acess(address, tmp, 4, 1);
 
@@ -228,6 +247,7 @@
 
 	    tmp = reg[rt];
 	    tmp = tmp & 0x0000FFFF;
+	    overflow_f(reg[rs], immediate, 1);
 	    address = reg[rs] + immediate;
 	    dmemory_acess(address, tmp, 2, 1);
 
@@ -239,6 +259,7 @@
 
 	    tmp = reg[rt];
 	    tmp = tmp & 0x000000FF;
+	    overflow_f(reg[rs], immediate, 1);
 	    address = reg[rs] + immediate;
 	    dmemory_acess(address, tmp, 1, 1);
 
@@ -313,21 +334,24 @@
 
 	int beq(int rs, int rt, int immediate){
 	    if(reg[rs] == reg[rt]){
-            pc_access(pc + immediate * 4, 1);
+            overflow_f(pc, immediate << 2, 1);
+            pc_access(pc + (immediate << 2), 1);
 	    }
 		return 0;
 	}
 
 	int bne(int rs, int rt, int immediate){
 	    if(reg[rs] != reg[rt]){
-            pc_access(pc + immediate * 4, 1);
+            overflow_f(pc, immediate << 2, 1);
+            pc_access(pc + (immediate << 2), 1);
 	    }
 		return 0;
 	}
 
 	int bgtz(int rs, int immediate){
 	    if(reg[rs] > 0){
-            pc_access(pc + immediate * 4, 1);
+            overflow_f(pc, immediate << 2, 1);
+            pc_access(pc + (immediate << 2), 1);
 	    }
 		return 0;
 	}

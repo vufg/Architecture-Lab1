@@ -43,3 +43,48 @@
 	"instrctions.h"
 	"io.h"
 
+1490410253 source:c:\users\zhufeng\desktop\pro1_vufg\io.cpp
+	"io.h"
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+	<bitset>
+
+1490364573 c:\users\zhufeng\desktop\pro1_vufg\io.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1490410082 source:c:\users\zhufeng\desktop\pro1_vufg\main.cpp
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+	"instrctions.h"
+	"io.h"
+	"one_cycle_simulator.h"
+
+1490183481 c:\users\zhufeng\desktop\pro1_vufg\instrctions.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1490183499 c:\users\zhufeng\desktop\pro1_vufg\one_cycle_simulator.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1490410184 source:c:\users\zhufeng\desktop\pro1_vufg\one_cycle_simulator.cpp
+	"one_cycle_simulator.h"
+	"instrctions.h"
+	"io.h"
+
+1490411279 source:c:\users\zhufeng\desktop\pro1_vufg\instructions.cpp
+	"instrctions.h"
+	"io.h"
+	<bitset>
+

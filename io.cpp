@@ -3,24 +3,24 @@
 #include <string>
 #include <cstdio>
 #include <fstream>
+#include <bitset>
 
 //no matter many bytes dmemory_access get or return
 //always in unsigned int form
 //all 0 in the left for half word or byte operation
 int dmemory_acess(int address, int value, int len, int write_enable){
 
-    if(address < 0 || address > 1023){
-        fprintf(error_dump , "In cycle %d: Address Overflow\n", cycle);
-        //printf("In cycle %d: Address Overflow\n", cycle);
+    if((address < 0 || address > 1023)||(address % len)){
+        if(address < 0 || address > 1023){
+            fprintf(error_dump , "In cycle %d: Address Overflow\n", cycle);
+        }
+        if(address % len){
+            fprintf(error_dump , "In cycle %d: Misalignment Error\n", cycle);
+        }
         quit_flag = true;
         return 0;
     }
-    if(address % len){
-        fprintf(error_dump , "In cycle %d: Misalignment Error\n", cycle);
-        //printf("In cycle %d: Misalignment Error\n", cycle);
-        quit_flag = true;
-        return 0;
-    }
+
     int tmp = dmemory[address/4];
     if(len == 4) {
         if(write_enable){
@@ -122,13 +122,24 @@ int lo_access(int value, int write_enable){
 
 
 
-bool overflow_f(int s, int a, int b){
-        s = s >> 31;
-        a = s >> 31;
-        b = b >> 31;
-        if( !(a ^ b) && (s^a) ){
-            fprintf(error_dump , "In cycle %d: Number Overflow\n", cycle);
+bool overflow_f(int a, int b, int error_drop){
 
+        int s = (a + b) >> 31;
+
+        /*
+        if(cycle == 93){
+            std::cout << "\n cycle 92: \n";
+            std::cout << std::bitset<32>(a)  << "\n";
+            std::cout << std::bitset<32>(b)   << "\n";
+            std::cout << std::bitset<32>(a+b)  << "\n";
+        }*/
+
+        a = a >> 31;
+        b = b >> 31;
+        if( !(a ^ b) && (s ^ a) ){
+            if(error_drop){
+                fprintf(error_dump , "In cycle %d: Number Overflow\n", cycle);
+            }
             return true;
         }
         return false;
