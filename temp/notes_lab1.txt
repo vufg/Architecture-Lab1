@@ -3,8 +3,19 @@ account:  s103062703
 password: s103062703
 
 
+Q:
+LO 
+HI
+PC
+$sp
+
+git version control log
 
 attack instructions notes:
+
+Address overflow or misaligned access in I or D memory is not allowed
+
+error message: illegal instruction found at 0xaddress
 
 Note that NOP instruction
 (sll $0, $0, 0=0x00000000) is the only exception for which no error is reported.
@@ -13,6 +24,22 @@ andi: immediate is unsigned
 slti: immediate is signed
 beq bne bgrz: immediate is signed
 
+write $0 is prior to other error;
+
+int tmp = 3587;
+cout << bitset<32>(tmp) << endl;
+cout << bitset<32>( (tmp) << 20) << endl;
+cout << bitset<32>( (tmp) << 20 >> 20) << endl;
+
+!!!!!!after error like misaligned data, reg will still be changed or not? do i have to output the data inside regs? NO
+
+in sw function  if the instruction trys to write $s0, dmemory_access will still be excuted, right?
+
+If the content of any register does not change from the previous cycle, then do not
+output the register. For cases that all registers change no values, then output only the cycle index
+and PC count.
+
+load iimage address overflow
 
 immediate sometimes is signed and sometimes is unsigned
 

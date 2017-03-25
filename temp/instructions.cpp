@@ -1,4 +1,4 @@
-#include "instructions.h"
+#include "instrctions.h"
 #include "io.h"
 #include <stdint.h>
     // instruction functions

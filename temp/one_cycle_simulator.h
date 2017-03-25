@@ -6,11 +6,8 @@
 #include <cstdio>
 #include <fstream>
 
-extern int imemory[300];
-extern int dmemory[300];
-extern int reg[50];
-
-
+extern int imemory[127];
+extern int dmemory[127], reg[31];
 extern int pc, hi, lo;
 extern bool mul_flag, quit_flag;
 extern int  cycle;

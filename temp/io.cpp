@@ -22,7 +22,6 @@ int dmemory_acess(int address, int value, int len, int write_enable){
     }
 
     int tmp = dmemory[address/4];
-
     if(len == 4) {
         if(write_enable){
             tmp = value;
@@ -73,6 +72,7 @@ int register_acess(int address, int value, int write_enable){
 
     if(address == 0 and write_enable){
         fprintf(error_dump , "In cycle %d: Write $0 Error\n", cycle);
+        //printf("In cycle %d: Write $0 Error\n", cycle);
         return 0;
     }
     if(write_enable){
@@ -119,9 +119,20 @@ int lo_access(int value, int write_enable){
 }
 
 
+
+
+
 bool overflow_f(int a, int b, int error_drop){
 
         int s = (a + b) >> 31;
+
+        /*
+        if(cycle == 93){
+            std::cout << "\n cycle 92: \n";
+            std::cout << std::bitset<32>(a)  << "\n";
+            std::cout << std::bitset<32>(b)   << "\n";
+            std::cout << std::bitset<32>(a+b)  << "\n";
+        }*/
 
         a = a >> 31;
         b = b >> 31;
@@ -137,7 +148,8 @@ bool overflow_f(int a, int b, int error_drop){
 
 unsigned int change_endian(unsigned int num){
     unsigned int ans = 0;
-    for(unsigned int i = 0; i < 4; i++){
+    //cout << bitset<32>(num) << endl << endl;
+    for(int i = 0; i < 4; i++){
         ans = ans | (num << (i << 3) >> 24 << (i << 3));
     }
     return ans;
@@ -148,6 +160,7 @@ void input_data_file(void){
     FILE *iimage_file, *dimage_file;
     unsigned int inst, num_dimage, num_iimage;
 
+    //initial several change marks to prepare for snapshot.rpt
     for(int i = 0; i < 32; i++)
         reg_changed[i] = true;
     hi_changed = true;
@@ -155,31 +168,46 @@ void input_data_file(void){
     pc_changed = true;
 
 
+
+    //open input files
     iimage_file = fopen("iimage.bin", "rb+");
     dimage_file = fopen("dimage.bin", "rb+");
 
 
     fread(&inst, sizeof(unsigned int), 1, dimage_file);
     register_acess(29, change_endian(inst), 1);
+    //printf("0x%08X\n", change_endian(inst));
 
     fread(&inst, sizeof(unsigned int), 1, dimage_file);
     num_dimage = change_endian(inst);
-
+    //printf("num_dimage: %X\n", num_dimage);
+    //printf("inst: %X\n", inst);
 
     for(unsigned int ii = 0; ii < num_dimage; ii++){
         fread(&inst, sizeof(unsigned int), 1, dimage_file);
+        //dmemory_acess(ii * 4, change_endian(inst), 4, 1);
         dmemory_acess(ii * 4, change_endian(inst), 4, 1);
     }
 
+
+    //input iimage.bin
     fread(&inst, sizeof(unsigned int), 1, iimage_file);
     pc = change_endian(inst);
+
     fread(&inst, sizeof(unsigned int), 1, iimage_file);
     num_iimage = change_endian(inst);
+
+
+    //std::cout << "iimage\n\n";
     for(unsigned int ii = 0; ii < num_iimage; ii++){
         fread(&inst, sizeof(unsigned int), 1, iimage_file);
         imemory[pc/4 + ii] = change_endian(inst);
-
+        //std::cout << ii << ":  " << std::hex << imemory[ii] << "\n";
     }
+
+    //std::cout << "\n\n\n wait...\n";
+    //int sw;
+    //std::cin >> sw;
 
     fclose(iimage_file);
     fclose(dimage_file);

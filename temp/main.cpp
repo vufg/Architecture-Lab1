@@ -1,14 +1,16 @@
+#include <iostream>
 #include <string>
 #include <cstdio>
-#include "instructions.h"
+#include <fstream>
+
+#include "instrctions.h"
 #include "io.h"
 #include "one_cycle_simulator.h"
 
 using namespace std;
 
-int imemory[300] = {0};
-int dmemory[300] = {0};
-int reg[50] = {0};
+int imemory[127] = {0};
+int dmemory[127] = {0}, reg[31] = {0};
 int pc = 0, hi = 0, lo = 0;
 
 int cycle = 0;
@@ -35,6 +37,7 @@ int main(){
         if(0){
             printf("cycle %d: 0x%08X \n", cycle+1, cmd);
         }
+
         pc_access(pc+4, 1);
         cycle++;
         one_cycle_simulator(cmd);

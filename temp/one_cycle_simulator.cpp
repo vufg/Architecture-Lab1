@@ -1,5 +1,5 @@
 #include "one_cycle_simulator.h"
-#include "instructions.h"
+#include "instrctions.h"
 #include "io.h"
 
 
