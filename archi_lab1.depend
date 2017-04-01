@@ -92,3 +92,49 @@
 	<cstdio>
 	<fstream>
 
+1491012497 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\instructions.cpp
+	"instructions.h"
+	"io.h"
+	<stdint.h>
+
+1490433932 c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\instructions.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1491022487 c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\io.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1491024206 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\io.cpp
+	"io.h"
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+	<bitset>
+	<string.h>
+
+1491026140 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\main.cpp
+	<string>
+	<cstdio>
+	"instructions.h"
+	"io.h"
+	"one_cycle_simulator.h"
+	<string.h>
+	<dirent.h>
+
+1490433921 c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\one_cycle_simulator.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1491012024 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\one_cycle_simulator.cpp
+	"one_cycle_simulator.h"
+	"instructions.h"
+	"io.h"
+

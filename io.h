@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <fstream>
 
+extern int global_cmd;
 
 extern int imemory[300];
 extern int dmemory[300];
@@ -30,7 +31,8 @@ unsigned int change_endian(unsigned int num);
 bool overflow_f(int a, int b, int error_drop);
 void output_register(void);
 
-void input_data_file(void);
+void input_data_file(std::string foldname);
+
 void close_output_file(void);
 
 

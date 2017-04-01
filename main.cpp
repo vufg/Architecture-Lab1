@@ -3,6 +3,8 @@
 #include "instructions.h"
 #include "io.h"
 #include "one_cycle_simulator.h"
+#include <string.h>
+#include <dirent.h>
 
 using namespace std;
 
@@ -14,34 +16,89 @@ int pc = 0, hi = 0, lo = 0;
 int cycle = 0;
 bool mul_flag = false, quit_flag = false, reg_changed[32], hi_changed, lo_changed, pc_changed;
 
+int global_cmd;
+
 FILE *snapshot, *error_dump;
 
-void open_output_file(void){
-    snapshot = fopen("snapshot.rpt", "w+");
-    error_dump = fopen("error_dump.rpt", "w+");
+void open_output_file(string foldname){
+    string filepath = "C:/Users/Zhufeng/Desktop/project1_pdfs/valid_testcase/";
+    string tmp_string;
+
+    tmp_string = filepath + foldname + "/snapshot_mine.rpt";
+    snapshot = fopen(tmp_string.c_str(), "w+");
+
+    tmp_string = filepath + foldname + "/error_dump_mine.rpt";
+    error_dump = fopen(tmp_string.c_str(), "w+");
 }
 
 
 int main(){
-    int cmd;
-    open_output_file();
-    input_data_file();
-    //int sv;
 
-    do{
-        output_register();
-        cmd = imemory[pc/4];
+    DIR *dir;
+    int cnt = 0;
+    struct dirent *ent;
+    string filepath = "C:/Users/Zhufeng/Desktop/project1_pdfs/valid_testcase/";
+    if ((dir = opendir(filepath.c_str())) != NULL) {
+        while ((ent = readdir(dir)) != NULL) {
+            cnt++;
+            printf("%s\n", ent->d_name);
+            if(strlen(ent->d_name) < 5){
+                //closedir(dir);
+                continue;
+            }
 
-        if(0){
-            printf("cycle %d: 0x%08X \n", cycle+1, cmd);
-        }
-        pc_access(pc+4, 1);
-        cycle++;
-        one_cycle_simulator(cmd);
+            for(int i = 0; i < 280; i++){
+                imemory[i] = 0;
+                dmemory[i] = 0;
+            }
 
-    }while(!quit_flag);
+            for(int i = 0; i < 40; i++){
+                reg[i] = 0;
+            }
+            pc = 0;
+            hi = 0;
+            lo = 0;
+            cycle = 0;
+            mul_flag = false;
+            quit_flag = false;
 
-    close_output_file();
+
+            open_output_file(ent->d_name);
+            input_data_file(ent->d_name);
+            //int sv;
+
+            do{
+                output_register();
+
+                //if(cycle == 1882){
+                if(0){
+                    printf("cycle %d: 0x%08X \n", cycle, global_cmd);
+                    printf("mem[%d]: 0x%08X \n", cycle, dmemory[7]);
+                    int stopword;
+                    cin >>  stopword;
+                    return 0;
+                    //printf("reg[3]: 0x%08X\n", reg[3]);
+                }
+
+                global_cmd = imemory[pc/4];
+
+                pc_access(pc+4, 1);
+                cycle++;
+                one_cycle_simulator(global_cmd);
+
+
+
+
+            }while(!quit_flag);
+
+            close_output_file();
+
+    }
+      closedir (dir);
+    //      cout << cnt << endl;
+    }
+
+
 
     return 0;
 }

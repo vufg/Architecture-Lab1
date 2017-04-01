@@ -4,14 +4,21 @@
 #include <cstdio>
 #include <fstream>
 #include <bitset>
+#include <string.h>
+
 
 //no matter many bytes dmemory_access get or return
 //always in unsigned int form
 //all 0 in the left for half word or byte operation
 int dmemory_acess(int address, int value, int len, int write_enable){
+    if(0){
+        printf("cycle %d: 0x%08X \n", cycle, global_cmd);
+        printf("mem[7]: 0x%08X \n", cycle, dmemory[7]);
+        printf("%d %d %d %d\n\n", address, value, len, write_enable);
+    }
 
-    if((address < 0 || address > 1023)||(address % len)){
-        if(address < 0 || address > 1023){
+    if((address < 0 || address + len - 1 > 1023)||(address % len)){
+        if(address < 0 || address + len - 1 > 1023){
             fprintf(error_dump , "In cycle %d: Address Overflow\n", cycle);
         }
         if(address % len){
@@ -22,6 +29,7 @@ int dmemory_acess(int address, int value, int len, int write_enable){
     }
 
     int tmp = dmemory[address/4];
+
 
     if(len == 4) {
         if(write_enable){
@@ -143,7 +151,7 @@ unsigned int change_endian(unsigned int num){
     return ans;
 }
 
-void input_data_file(void){
+void input_data_file(std::string foldname){
 
     FILE *iimage_file, *dimage_file;
     unsigned int inst, num_dimage, num_iimage;
@@ -154,9 +162,17 @@ void input_data_file(void){
     lo_changed = true;
     pc_changed = true;
 
+    std::string filepath = "C:/Users/Zhufeng/Desktop/project1_pdfs/valid_testcase/";
 
-    iimage_file = fopen("iimage.bin", "rb+");
-    dimage_file = fopen("dimage.bin", "rb+");
+    std::string iimage_name = "/iimage.bin";
+    std::string dimage_name = "/dimage.bin";
+    std::string tmp_string;
+    tmp_string = (filepath + foldname  + iimage_name);
+    iimage_file = fopen(tmp_string.c_str(), "rb+");
+    //iimage_file = fopen(strcat(filepath, strcat(foldname,"iimage.bin")), "rb+");
+    tmp_string = (filepath + foldname  + dimage_name);
+    //dimage_file = fopen(strcat(filepath, strcat(foldname,"dimage.bin")), "rb+")
+    dimage_file = fopen(tmp_string.c_str(), "rb+");
 
 
     fread(&inst, sizeof(unsigned int), 1, dimage_file);

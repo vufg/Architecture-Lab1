@@ -2,56 +2,51 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="424" topLine="7" />
-		</Cursor>
-	</File>
-	<File name="io.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="248" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="instrctions.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="8" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="252" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="one_cycle_simulator.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="280" topLine="0" />
+			<Cursor1 position="455" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="io.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2825" topLine="78" />
+			<Cursor1 position="3284" topLine="120" />
 		</Cursor>
-		<Folding>
-			<Collapse line="88" />
-		</Folding>
 	</File>
-	<File name="instructions.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+	<File name="io.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="6419" topLine="209" />
+			<Cursor1 position="177" topLine="0" />
 		</Cursor>
-		<Folding>
-			<Collapse line="4" />
-			<Collapse line="11" />
-			<Collapse line="20" />
-			<Collapse line="27" />
-			<Collapse line="34" />
-			<Collapse line="41" />
-			<Collapse line="48" />
-			<Collapse line="55" />
-			<Collapse line="62" />
-			<Collapse line="71" />
-			<Collapse line="78" />
-			<Collapse line="85" />
-		</Folding>
+	</File>
+	<File name="one_cycle_simulator.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="209" topLine="0" />
+		</Cursor>
 	</File>
 	<File name="one_cycle_simulator.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1195" topLine="1" />
+			<Cursor1 position="382" topLine="6" />
 		</Cursor>
+	</File>
+	<File name="instructions.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="193" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="instructions.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="25" topLine="224" />
+		</Cursor>
+		<Folding>
+			<Collapse line="57" />
+			<Collapse line="64" />
+			<Collapse line="71" />
+			<Collapse line="87" />
+			<Collapse line="94" />
+			<Collapse line="115" />
+			<Collapse line="123" />
+			<Collapse line="130" />
+			<Collapse line="137" />
+			<Collapse line="144" />
+		</Folding>
 	</File>
 </CodeBlocks_layout_file>

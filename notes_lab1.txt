@@ -1,7 +1,27 @@
+00000068
+0000001B
+
+84040000
+84050002
+
+00A01825
+00001024
+20080020
+0008482A
+
+1009000D
+30690001
+
+
+
+
+
 140.114.75.143
 account:  s103062703
 password: s103062703
 
+problems not considered:
+1022 + 4 = 1026: out of range
 
 
 attack instructions notes:
