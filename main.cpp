@@ -3,6 +3,8 @@
 #include "instructions.h"
 #include "io.h"
 #include "one_cycle_simulator.h"
+#include <string.h>
+#include <dirent.h>
 
 using namespace std;
 
@@ -14,6 +16,8 @@ int pc = 0, hi = 0, lo = 0;
 int cycle = 0;
 bool mul_flag = false, quit_flag = false, reg_changed[32], hi_changed, lo_changed, pc_changed;
 
+int global_cmd;
+
 FILE *snapshot, *error_dump;
 
 void open_output_file(void){
@@ -23,25 +27,22 @@ void open_output_file(void){
 
 
 int main(){
-    int cmd;
     open_output_file();
     input_data_file();
-    //int sv;
-
     do{
-        output_register();
-        cmd = imemory[pc/4];
 
-        if(0){
-            printf("cycle %d: 0x%08X \n", cycle+1, cmd);
-        }
+        output_register();
+        global_cmd = imemory[pc/4];
         pc_access(pc+4, 1);
+
         cycle++;
-        one_cycle_simulator(cmd);
+        one_cycle_simulator(global_cmd);
+
 
     }while(!quit_flag);
 
     close_output_file();
+
 
     return 0;
 }

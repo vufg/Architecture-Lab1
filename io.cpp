@@ -4,14 +4,20 @@
 #include <cstdio>
 #include <fstream>
 #include <bitset>
+#include <string.h>
+
 
 //no matter many bytes dmemory_access get or return
 //always in unsigned int form
 //all 0 in the left for half word or byte operation
 int dmemory_acess(int address, int value, int len, int write_enable){
-
-    if((address < 0 || address > 1023)||(address % len)){
-        if(address < 0 || address > 1023){
+    if((address < 0 || address + len - 1 > 1023)||(address % len) || address > 1023){
+        //if(cycle == 2707){
+            //printf("%0x08X")
+          //  printf("cycle 2707: %d %d %d %d\n", address, value, len, write_enable);
+            //std::cout << "%%%" << address % len << "\n\n";
+        //}
+        if(address < 0 || address + len - 1 > 1023|| address > 1023){
             fprintf(error_dump , "In cycle %d: Address Overflow\n", cycle);
         }
         if(address % len){
@@ -22,6 +28,7 @@ int dmemory_acess(int address, int value, int len, int write_enable){
     }
 
     int tmp = dmemory[address/4];
+
 
     if(len == 4) {
         if(write_enable){
@@ -155,7 +162,9 @@ void input_data_file(void){
     pc_changed = true;
 
 
+
     iimage_file = fopen("iimage.bin", "rb+");
+
     dimage_file = fopen("dimage.bin", "rb+");
 
 

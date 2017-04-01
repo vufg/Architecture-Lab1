@@ -43,26 +43,29 @@
 	"instrctions.h"
 	"io.h"
 
-1490434986 source:c:\users\zhufeng\desktop\pro1_vufg\io.cpp
+1491060856 source:c:\users\zhufeng\desktop\pro1_vufg\io.cpp
 	"io.h"
 	<iostream>
 	<string>
 	<cstdio>
 	<fstream>
 	<bitset>
+	<string.h>
 
-1490433927 c:\users\zhufeng\desktop\pro1_vufg\io.h
+1491058017 c:\users\zhufeng\desktop\pro1_vufg\io.h
 	<iostream>
 	<string>
 	<cstdio>
 	<fstream>
 
-1490433964 source:c:\users\zhufeng\desktop\pro1_vufg\main.cpp
+1491061711 source:c:\users\zhufeng\desktop\pro1_vufg\main.cpp
 	<string>
 	<cstdio>
 	"instructions.h"
 	"io.h"
 	"one_cycle_simulator.h"
+	<string.h>
+	<dirent.h>
 
 1490183481 c:\users\zhufeng\desktop\pro1_vufg\instrctions.h
 	<iostream>
@@ -76,12 +79,12 @@
 	<cstdio>
 	<fstream>
 
-1490427373 source:c:\users\zhufeng\desktop\pro1_vufg\one_cycle_simulator.cpp
+1491012024 source:c:\users\zhufeng\desktop\pro1_vufg\one_cycle_simulator.cpp
 	"one_cycle_simulator.h"
 	"instructions.h"
 	"io.h"
 
-1490427247 source:c:\users\zhufeng\desktop\pro1_vufg\instructions.cpp
+1491061924 source:c:\users\zhufeng\desktop\pro1_vufg\instructions.cpp
 	"instructions.h"
 	"io.h"
 	<stdint.h>
@@ -91,4 +94,50 @@
 	<string>
 	<cstdio>
 	<fstream>
+
+1491012497 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\instructions.cpp
+	"instructions.h"
+	"io.h"
+	<stdint.h>
+
+1490433932 c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\instructions.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1491058017 c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\io.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1491024206 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\io.cpp
+	"io.h"
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+	<bitset>
+	<string.h>
+
+1491058182 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\main.cpp
+	<string>
+	<cstdio>
+	"instructions.h"
+	"io.h"
+	"one_cycle_simulator.h"
+	<string.h>
+	<dirent.h>
+
+1490433921 c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\one_cycle_simulator.h
+	<iostream>
+	<string>
+	<cstdio>
+	<fstream>
+
+1491012024 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\one_cycle_simulator.cpp
+	"one_cycle_simulator.h"
+	"instructions.h"
+	"io.h"
 

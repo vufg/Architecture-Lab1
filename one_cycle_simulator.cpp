@@ -176,7 +176,7 @@ int one_cycle_simulator(int cmd){
             break;
 
         case 0x0C:
-            addi(rt, rs, immediate);
+            andi(rt, rs, immediate);//misspelled as addi
             break;
 
         case 0x0D:
