@@ -106,7 +106,11 @@
 	<cstdio>
 	<fstream>
 
+<<<<<<< HEAD
 1491058017 c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\io.h
+=======
+1491022487 c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\io.h
+>>>>>>> origin/master
 	<iostream>
 	<string>
 	<cstdio>
@@ -121,7 +125,11 @@
 	<bitset>
 	<string.h>
 
+<<<<<<< HEAD
 1491058182 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\main.cpp
+=======
+1491026140 source:c:\users\zhufeng\desktop\project1_pdfs\pro1_vufg\main.cpp
+>>>>>>> origin/master
 	<string>
 	<cstdio>
 	"instructions.h"
